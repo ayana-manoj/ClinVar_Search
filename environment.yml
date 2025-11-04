@@ -1,4 +1,4 @@
-name: Softengpythexe
+name: ClinVar_Search
 channels:
   - conda-forge
   - bioconda

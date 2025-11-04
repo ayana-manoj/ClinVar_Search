@@ -10,7 +10,7 @@ keywords = [
     "DNA Sequence",
     "API",
     "CSV files",
-    "VCF file"s
+    "VCF files",
 ]
 requires-python = ">=3.12.8"
 

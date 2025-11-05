@@ -9,7 +9,7 @@ def save_output_to_file(Fileof=str, title=str):
      It essentially checks directories for an output directory, if one does not exist, then it will make a directory """
     try:
         if "Clinvar_Search_Output_Files" in os.listdir():
-            os.chdir("Clinvar_Seach_Output_Files")
+            os.chdir("Clinvar_Search_Output_Files")
             location = os.getcwd()
         else:
             os.mkdir("Clinvar_Search_Output_Files")

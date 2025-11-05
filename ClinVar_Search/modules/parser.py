@@ -74,8 +74,13 @@ def determine_file_type():
             Fileof = csvparser(Fileof)
         elif Fileof.endswith(".vcf"):
             Fileof = vcfparser(Fileof)
+        else:
+            logger.error(f"wrong file type! Make sure your file either ends with vcf or csv")
+            Fileof = None
+            title = None
     except Exception as e:
             logger.error(f"wrong file type! Make sure your file either ends with vcf or csv")
+
      
     return Fileof, title
 

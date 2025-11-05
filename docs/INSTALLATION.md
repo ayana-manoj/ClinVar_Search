@@ -2,7 +2,7 @@ ClinVar_Search Installation Guide
 
 This document describes the installation and configuration of the required packages and dependencies for ClinVar_Search
 
-## Prerequisites
+# Prerequisites:
 
 Before installation, make sure you have:
 - Python 3.12.8 installed
@@ -24,3 +24,5 @@ After installing conda you can create a new virtual environment with the correct
 
 $ conda env create -f environment.yml
 $ conda activate ClinVar_Search
+
+If ClinVar_Search is not found as a module (ModuleNotFoundError), add this project to python path using export PYTHONPATH=/path/to/project/ClinVar_Search:$PYTHONPATH

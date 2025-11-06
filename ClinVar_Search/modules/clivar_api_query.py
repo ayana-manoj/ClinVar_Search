@@ -1,5 +1,5 @@
 """
-clinvar_variant_query.py
+clinvar_api_query.py
 ------------------------
 This script queries the NCBI ClinVar API to find variant information
 based on chromosome number, genomic position, and nucleotide change.

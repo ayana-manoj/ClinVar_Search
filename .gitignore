@@ -4,4 +4,11 @@ ClinVar_Search/__pycache__
 logs
 Clinvar_Search_Output_Files
 ClinVar_Search/modules/__pycache__
+examples
+ClinVar_Search/ClinVar_Site/Clinvar_Search_Outputs
+ClinVar_Search/ClinVar_Site/Clinvar_Uploads
+.vscode
+tests/__pycache__
+
+
 

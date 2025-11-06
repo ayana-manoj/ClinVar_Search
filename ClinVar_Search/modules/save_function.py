@@ -4,7 +4,7 @@ import os
 import pathlib as Path
 from ClinVar_Search.logger import logger
 #This function saves a file in a specified directory 
-def save_output_to_file(Fileof=str, title=str):
+def save_output_to_file(Fileof=str, title=str, overwrite: bool = False):
     """"This is adapted from some code I wrote a while ago that I used for the UniPyProject among other projects
      It essentially checks directories for an output directory, if one does not exist, then it will make a directory """
     try:
@@ -22,22 +22,20 @@ def save_output_to_file(Fileof=str, title=str):
         """
         if os.path.exists(parsed_file):
             logger.warning("A file already exists with this name!")
-            userinput = input("Would you like to overwrite the file? Enter 1 to overwrite, press 2 to quit ")
-            if userinput =="1":
+            if overwrite:
                 with open(parsed_file, "w", encoding="utf-8") as file:
                     file.write(Fileof)
                 logger.info("File overwritten via user input")
-                print(f"Parsed file overwritten at {location}")
-            elif userinput =="2":
-                logger.info("File saving cancelled due to user input")
-                print("Output cancelled")
+                return parsed_file
             else:
-                logger.warning("Invalid operation, cancelling ")
+                logger.info("File saving cancelled due to user input")
+                return None
         else:
             with open(parsed_file, "w", encoding="utf-8") as file:
                     file.write(Fileof)
             print(f"Parsed file saved to {location}")
     except Exception as e:
         logger.error("failed to save file to location : {}" .format(e))
+        return None
 
 

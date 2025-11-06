@@ -5,23 +5,31 @@ from pathlib import Path
 import csv
 import re
 #These modules read through the csv and vcf file in order to output a consistent sequence
-def csvparser(Fileof):
+def csvparser(file_path: Path):
+    variants = []
     try:
-        csv_object = ""
-        with open (Fileof, newline="") as csvfile:
-            csvparser = csv.reader(csvfile, delimiter=" ", quotechar= "|")
-            for row in csvparser:
-                csv_object +=("\n"+" ".join(row))
-                csv_object = re.sub(r"^#.*","", csv_object, flags=re.MULTILINE)
-                csv_object = csv_object.replace(".", "")
-                csv_object = csv_object.replace(",", "-")
-                csv_object = csv_object.replace("--", "-")
-                csv_object = csv_object.strip()      
-        Fileof = csv_object
+        with open(file_path, newline="") as csvfile:
+            csv_file = csv.reader(csvfile, delimiter=",")
+            for row in csv_file:
+                if not row or row[0].startswith("#"):
+                    continue
+                if len(row) >=5 :
+                    chrom = row[0].strip() 
+                    pos = row[1].strip() 
+                    ref = row[3].strip() 
+                    alt = row[4].strip() 
+
+                if chrom and pos and ref and alt:
+                    variant = f"{chrom}-{pos}-{ref}-{alt}"
+                    variants.append(variant)
+            csv_string = "\n".join(variants)
+            return csv_string
+        
+
     except Exception as e:
         logger.error("Failed to parse csv file! {}" .format(e))
         
-    return Fileof
+        return csv_string
 """"
 The expected inputs and outputs of this could, which parse through, a csv file, would involve 
 input:
@@ -33,23 +41,33 @@ output
 """
 
 
-def vcfparser(Fileof):
+def vcfparser(file_path: Path):
+    variants = []
     try:
-        vcf_object = ""
-        with open (Fileof, newline="") as vcffile:
-            vcfparser = csv.reader(vcffile, delimiter="\t", quotechar= "|")
-            for row in vcfparser:
-                vcf_object +=("\n"+" ".join(row))
-                vcf_object = re.sub(r"^#.*","", vcf_object, flags=re.MULTILINE)
-                vcf_object = vcf_object.replace(".", "")
-                vcf_object = vcf_object.replace(" ", "-")
-                vcf_object = vcf_object.replace("--", "-")
-                vcf_object = vcf_object.strip()
-        Fileof = vcf_object
+        with open(file_path, newline="") as vcffile:
+            vcf_file = csv.reader(vcffile, delimiter="\t")
+            for row in vcf_file:
+                if not row or row[0].startswith("#"):
+                    continue
+                if len(row) >=5 :
+                    chrom = row[0].strip() 
+                    pos = row[1].strip() 
+                    ref = row[3].strip() 
+                    alt = row[4].strip() 
+                #remove "chr prefix" and then move on
+                    chrom = chrom.lstrip("chr")
+
+                if chrom and pos and ref and alt:
+                    variant = f"{chrom}-{pos}-{ref}-{alt}"
+                    variants.append(variant)
+            vcf_string = "\n".join(variants)
+            return vcf_string
+
+
     except Exception as e:
         logger.error ("Failed to parse VCF file!: {}" .format(e))
         
-    return Fileof
+        return vcf_string
 
 """"
 The expected inputs and outputs of this could, which parse through, a csv file, would involve 
@@ -64,25 +82,25 @@ output
 
 
  #this function determines a file ending and then makes it so that the correct parser works with it. It needs a file that either ends with csv or vcf           
-def determine_file_type():
+def determine_file_type(file_path=str):
     try:
-        Fileof= input(f"which file would you like to read in?")
+        file_path= input(f"which file would you like to read in?")
         #This uses the path library to take the file title without the extension
-        title = Path(Fileof).stem
+        title = Path(file_path).stem
         #this evaluates the csv or vcf. If this is neither then an error occurs
-        if Fileof.endswith(".csv"):
-            Fileof = csvparser(Fileof)
-        elif Fileof.endswith(".vcf"):
-            Fileof = vcfparser(Fileof)
+        if file_path.endswith(".csv"):
+            file_path = csvparser(Fileof)
+        elif file_path.endswith(".vcf"):
+            file_path = vcfparser(Fileof)
         else:
             logger.error(f"wrong file type! Make sure your file either ends with vcf or csv")
-            Fileof = None
-            title = None
+            file_path = None
+            file_path = None
     except Exception as e:
             logger.error(f"wrong file type! Make sure your file either ends with vcf or csv")
 
      
-    return Fileof, title
+    return file_path, title
 
 """
 The goal now is to further edit the outputs of csvparser and vcfparser so that both outputs are:
@@ -92,7 +110,7 @@ This will allow the resulting output to always be compatible with HGVS compliant
 
 
 if __name__ == "__main__":
-    Fileof, title = determine_file_type() 
-    save_output_to_file(Fileof,title)
+    file_path, title = determine_file_type() 
+    save_output_to_file(file_path,title)
                   
 

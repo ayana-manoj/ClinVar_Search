@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Clinvar Upload{% endblock %}
+
+{% block content %}
+  <style>
+    /* --- PAGE STYLES --- */
+
+    /* Fancy animated gradient header */
+    .header-section {
+      background: linear-gradient(270deg, #0d6efd, #6610f2, #d63384);
+      background-size: 600% 600%;
+      color: white;
+      padding: 3rem 1rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+      animation: gradientShift 8s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .header-section h1 {
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Card with hover lift effect */
+    .card {
+      border: none;
+      border-radius: 1rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(13, 110, 253, 0.25);
+    }
+
+    /* Drag-and-drop zone styling */
+    #drop_zone {
+      border: 2px dashed #0d6efd; /* Bootstrap primary color */
+      border-radius: 10px;
+      padding: 40px;
+      text-align: center;
+      color: #6c757d; /* Bootstrap's secondary text color */
+      cursor: pointer;
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    #drop_zone.dragover {
+      background-color: #e7f1ff;
+      border-color: #0a58ca;
+    }
+  </style>
+
+
+
+  <div class="container">
+    <div class="card shadow-sm mx-auto" style="max-width: 600px;">
+      <div class="card-body">
+        <h1 class="card-title mb-4 text-center text-primary">Upload Your File</h1>
+        <p class = "text-secondary mb-4">
+            Please upload your data in either a CSV or VCF format!
+            You can drag and drop the file or click to choose one.
+        </p>
+        <!-- Upload form -->
+        <form id="upload_form" method="POST" enctype="multipart/form-data">
+          <!-- Drag-and-drop area -->
+          <div id="drop_zone" class="mb-3">
+            <p class="mb-0">📁 Drag and drop your file here, or click to select</p>
+            <input type="file" name="file" id="file_input" class="form-control mt-3" required hidden>
+          </div>
+
+          <!-- Overwrite checkbox -->
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="overwrite" name="overwrite">
+            <label class="form-check-label" for="overwrite">
+              Allow overwriting existing files
+            </label>
+          </div>
+
+          <!-- Submit button -->
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Upload</button>
+          </div>
+        </form>
+
+        <!-- Status message -->
+        <div id="status_message" class="mt-3 text-center fw-semibold"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+  <script>
+    // --- Get DOM elements ---
+    const uploadForm = document.getElementById('upload_form');
+    const fileInput = document.getElementById('file_input');
+    const dropZone = document.getElementById('drop_zone');
+    const statusMessage = document.getElementById('status_message');
+
+    // --- Highlight drop zone on drag ---
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault(); // Prevent browser’s default behavior
+      dropZone.classList.add('dragover'); // Add visual highlight
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('dragover'); // Remove highlight when dragging leaves
+    });
+
+    // --- Handle file drop ---
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+
+      // Get dropped files
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        fileInput.files = files; // Assign dropped files to hidden input
+      }
+    });
+
+    // --- Click to open file picker ---
+    dropZone.addEventListener('click', () => {
+      fileInput.click(); // Trigger hidden input when clicking the drop area
+    });
+
+    // --- Handle form submission via Fetch API ---
+    uploadForm.addEventListener('submit', function(e) {
+      e.preventDefault(); // Prevent normal form submission
+
+      // Prepare FormData
+      const formData = new FormData(uploadForm);
+
+      // Append overwrite flag explicitly
+      const overwrite = document.getElementById('overwrite').checked ? 'true' : 'false';
+      formData.set('overwrite', overwrite);
+
+      // Send request to Flask backend
+      fetch('/upload', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.text())
+      .then(data => {
+        // Display success message
+        statusMessage.className = 'mt-3 text-success fw-semibold';
+        statusMessage.innerHTML = data;
+      })
+      .catch(error => {
+        // Display error message
+        statusMessage.className = 'mt-3 text-danger fw-semibold';
+        statusMessage.innerText = '❌ Error uploading file!';
+      });
+    });
+  </script>
+
+{% endblock %}

@@ -7,29 +7,45 @@ import re
 #These modules read through the csv and vcf file in order to output a consistent sequence
 def csvparser(file_path: Path):
     variants = []
+    misaligned_rows = []
     try:
         with open(file_path, newline="") as csvfile:
             csv_file = csv.reader(csvfile, delimiter=",")
             for row in csv_file:
                 if not row or row[0].startswith("#"):
                     continue
+
+                chrom = pos = ref = alt = None
+
                 if len(row) >=5 :
                     chrom = row[0].strip() 
                     pos = row[1].strip() 
                     ref = row[3].strip() 
                     alt = row[4].strip() 
+                 #remove "chr prefix" and then move on
+                    chrom = chrom.lstrip("chr")
 
                 if chrom and pos and ref and alt:
                     variant = f"{chrom}-{pos}-{ref}-{alt}"
                     variants.append(variant)
+                else:
+                    misaligned_row = f"incomplete or misalinged row {row}"
+                    misaligned_rows.append(misaligned_row)
+                    logger.error = (f"incomplete or misaligned row {row}")
+
+
             csv_string = "\n".join(variants)
-            return csv_string
+            if misaligned_rows:
+                misaligned_string = "\n".join(misaligned_rows)
+                return csv_string, misaligned_string
+            else:
+                misaligned_string = ""
+                return csv_string, misaligned_string
         
 
     except Exception as e:
         logger.error("Failed to parse csv file! {}" .format(e))
-        
-        return csv_string
+        return None, None
 """"
 The expected inputs and outputs of this could, which parse through, a csv file, would involve 
 input:
@@ -43,14 +59,18 @@ output
 
 def vcfparser(file_path: Path):
     variants = []
+    misaligned_rows = []
     try:
         with open(file_path, newline="") as vcffile:
             vcf_file = csv.reader(vcffile, delimiter="\t")
             for row in vcf_file:
                 if not row or row[0].startswith("#"):
                     continue
+
+                chrom = pos = ref = alt = None
+
                 if len(row) >=5 :
-                    chrom = row[0].strip() 
+                    chrom = row[0].strip()
                     pos = row[1].strip() 
                     ref = row[3].strip() 
                     alt = row[4].strip() 
@@ -60,14 +80,24 @@ def vcfparser(file_path: Path):
                 if chrom and pos and ref and alt:
                     variant = f"{chrom}-{pos}-{ref}-{alt}"
                     variants.append(variant)
-            vcf_string = "\n".join(variants)
-            return vcf_string
+                else:
+                    misaligned_row = f"incomplete or misalinged row {row}"
+                    misaligned_rows.append(misaligned_row)
+                    logger.error = (f"incomplete or misaligned row {row}")
 
+
+            vcf_string = "\n".join(variants)
+            if misaligned_rows:
+                misaligned_string = "\n".join(misaligned_rows)
+                return vcf_string, misaligned_string
+            else:
+                misaligned_string = ''
+                return vcf_string, misaligned_string
 
     except Exception as e:
         logger.error ("Failed to parse VCF file!: {}" .format(e))
         
-        return vcf_string
+        return None, None
 
 """"
 The expected inputs and outputs of this could, which parse through, a csv file, would involve 
@@ -110,7 +140,7 @@ This will allow the resulting output to always be compatible with HGVS compliant
 
 
 if __name__ == "__main__":
-    file_path, title = determine_file_type() 
-    save_output_to_file(file_path,title)
+    vcfparser("tests/test_files/Patient5.vcf")
+    csvparser("tests/test_files/Patient5.csv")
                   
 

@@ -4,9 +4,6 @@
 
 {% block content %}
   <style>
-    /* --- PAGE STYLES --- */
-
-    /* Fancy animated gradient header */
     .header-section {
       background: linear-gradient(270deg, #0d6efd, #6610f2, #d63384);
       background-size: 600% 600%;
@@ -70,7 +67,12 @@
             You can drag and drop the file or click to choose one.
         </p>
         <!-- Upload form -->
-        <form id="upload_form" method="POST" enctype="multipart/form-data">
+        <form
+  id="upload_form"
+  method="POST"
+  action="{{ url_for('upload_file') }}"
+  enctype="multipart/form-data"
+>
           <!-- Drag-and-drop area -->
           <div id="drop_zone" class="mb-3">
             <p class="mb-0">📁 Drag and drop your file here, or click to select</p>
@@ -134,34 +136,8 @@
       fileInput.click(); // Trigger hidden input when clicking the drop area
     });
 
-    // --- Handle form submission via Fetch API ---
-    uploadForm.addEventListener('submit', function(e) {
-      e.preventDefault(); // Prevent normal form submission
 
-      // Prepare FormData
-      const formData = new FormData(uploadForm);
-
-      // Append overwrite flag explicitly
-      const overwrite = document.getElementById('overwrite').checked ? 'true' : 'false';
-      formData.set('overwrite', overwrite);
-
-      // Send request to Flask backend
-      fetch('/upload', {
-        method: 'POST',
-        body: formData
-      })
-      .then(response => response.text())
-      .then(data => {
-        // Display success message
-        statusMessage.className = 'mt-3 text-success fw-semibold';
-        statusMessage.innerHTML = data;
-      })
-      .catch(error => {
-        // Display error message
-        statusMessage.className = 'mt-3 text-danger fw-semibold';
-        statusMessage.innerText = '❌ Error uploading file!';
-      });
-    });
+    
   </script>
 
 {% endblock %}

@@ -3,5 +3,125 @@
 {% block title %}Home | Clinvar Patient Lookup{% endblock %}
 
 {% block content %}
+ <style>
+    .header-section {
+      background: linear-gradient(270deg, #0d6efd, #6610f2, #d63384);
+      background-size: 600% 600%;
+      color: white;
+      padding: 3rem 1rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+      animation: gradientShift 8s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .header-section h1 {
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Card with hover lift effect */
+    .card {
+      border: none;
+      border-radius: 1rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(13, 110, 253, 0.25);
+    }
+    </style>
+    
+
+<div class="container">
+  <div class="card shadow-sm mx-auto" style="max-width: 600px;">
+    <div class="card-body">
+      <h1 class="card-title mb-4 text-center text-primary">View Results here</h1>
+      <p class="text-secondary mb-4">
+        Here is where you can see your latest results.
+        Click on either list to get insights into your data.
+      </p>
+
+      <!-- Database List -->
+      <h3 class="mt-4 text-primary">Database Results</h3>
+      <ul class="list-group mb-4">
+        {% if db_results %}
+          {% for item in db_results %}
+            <li class="list-group-item">{{ item }}</li>
+          {% endfor %}
+        {% else %}
+          <li class="list-group-item text-muted">No database entries yet.</li>
+        {% endif %}
+      </ul>
+
+      <!-- Latest File List -->
+      <h3 class="mt-4 text-primary">Latest Patient processed</h3>
+      <ul class="list-group">
+        {% if files %}
+          {% for file in files %}
+            <li class="list-group-item">
+             <a href="#" class="file-link" data-filename="{{ file }}">{{ file }}</a>
+            </li>
+          {% endfor %}
+        {% else %}
+          <li class="list-group-item text-muted">No files found.</li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="fileModal" tabindex="-1" aria-labelledby="fileModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="fileModalLabel">File Content</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <pre id="fileContent" style="white-space: pre-wrap;"></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const modal = new bootstrap.Modal(document.getElementById('fileModal'));
+  const fileContent = document.getElementById('fileContent');
+  const modalTitle = document.getElementById('fileModalLabel');
+
+  document.querySelectorAll('.file-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const filename = this.dataset.filename;  // <- this must match your folder
+
+      fetch(`/view_file?filename=${encodeURIComponent(filename)}`)
+        .then(response => {
+          if (!response.ok) throw new Error("File not found.");
+          return response.text();
+        })
+        .then(data => {
+          modalTitle.textContent = filename;
+          fileContent.textContent = data;
+          modal.show();
+        })
+        .catch(err => {
+          fileContent.textContent = "Error loading file: " + err;
+          modal.show();
+        });
+    });
+  });
+});
+</script>
 
 {% endblock %}

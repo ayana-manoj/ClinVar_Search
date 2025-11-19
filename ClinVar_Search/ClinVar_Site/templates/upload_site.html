@@ -4,28 +4,6 @@
 
 {% block content %}
   <style>
-    .header-section {
-      background: linear-gradient(270deg, #0d6efd, #6610f2, #d63384);
-      background-size: 600% 600%;
-      color: white;
-      padding: 3rem 1rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
-      animation: gradientShift 8s ease infinite;
-    }
-
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    .header-section h1 {
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
-    }
-
     /* Card with hover lift effect */
     .card {
       border: none;
@@ -75,7 +53,7 @@
 >
           <!-- Drag-and-drop area -->
           <div id="drop_zone" class="mb-3">
-            <p class="mb-0">📁 Drag and drop your file here, or click to select</p>
+            <p class="mb-0"><i class="bi bi-folder"></i> Drag and drop your file here, or click to select </p>
             <input type="file" name="file" id="file_input" class="form-control mt-3" required hidden>
           </div>
 
@@ -89,9 +67,11 @@
 
           <!-- Submit button -->
           <div class="d-grid">
-            <button type="submit" class="btn btn-primary">Upload</button>
+            <button id="upload_btn" class="btn btn-primary" disabled>Upload</button>
           </div>
         </form>
+
+        <p id="file_message" class="mt-2 text-center text-secondary"></p>
 
         <!-- Status message -->
         <div id="status_message" class="mt-3 text-center fw-semibold"></div>
@@ -103,41 +83,52 @@
   <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
   <script>
-    // --- Get DOM elements ---
-    const uploadForm = document.getElementById('upload_form');
-    const fileInput = document.getElementById('file_input');
-    const dropZone = document.getElementById('drop_zone');
-    const statusMessage = document.getElementById('status_message');
 
-    // --- Highlight drop zone on drag ---
-    dropZone.addEventListener('dragover', (e) => {
-      e.preventDefault(); // Prevent browser’s default behavior
-      dropZone.classList.add('dragover'); // Add visual highlight
-    });
+  // DOM references
+  const fileInput = document.getElementById('file_input');
+  const dropZone = document.getElementById('drop_zone');
+  const uploadBtn = document.getElementById('upload_btn');
+  const fileMessage = document.getElementById('file_message');
 
-    dropZone.addEventListener('dragleave', () => {
-      dropZone.classList.remove('dragover'); // Remove highlight when dragging leaves
-    });
+  // Handle file selection / dropping
+  function handleFiles(files) {
+    if (files.length > 0) {
+      fileMessage.textContent = `File selected: ${files[0].name}. Press Upload to continue.`;
+      uploadBtn.disabled = false;      // The upload button is disable by default, this ensure that only uploading a file will allow you to submit it for processing
+      fileInput.files = files;         // 
+    } else {
+      fileMessage.textContent = "";
+      uploadBtn.disabled = true;       // This ensure form resubmission doesn't happen
+    }
+  }
 
-    // --- Handle file drop ---
-    dropZone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dropZone.classList.remove('dragover');
+  // Highlight drop zone on drag
+  dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+  });
 
-      // Get dropped files
-      const files = e.dataTransfer.files;
-      if (files.length > 0) {
-        fileInput.files = files; // Assign dropped files to hidden input
-      }
-    });
+  dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('dragover');
+  });
 
-    // --- Click to open file picker ---
-    dropZone.addEventListener('click', () => {
-      fileInput.click(); // Trigger hidden input when clicking the drop area
-    });
+  // Handle file drop
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
 
+    const files = e.dataTransfer.files;   // get dropped files
+    handleFiles(files);                    // process files using the Handle files function
+  });
 
-    
-  </script>
+  // Click-to-open file picker
+  dropZone.addEventListener('click', () => {
+    fileInput.click();
+  });
 
+  // Handle file selected via picker
+  fileInput.addEventListener('change', () => {
+    handleFiles(fileInput.files);
+  });
+</script>
 {% endblock %}

@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Welcome to Clinvar Search 🔎 </title>
-  
+  <title>Welcome to Clinvar Search</title>
+  <!--for the page -->
   <link rel="stylesheet" href="{{ url_for('static', filename= 'bootstrap/css/bootstrap.min.css')}}">
+  <!-- for the icons-->
+  <link rel="stylesheet" href="{{ url_for('static', filename= 'bootstrap/bootstrap-icons/bootstrap-icons.css')}}">
 
 </head>
 <body>
@@ -13,7 +15,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{{ url_for('index') }}">Clinvar Search 🔎</a>
+    <a class="navbar-brand" href="{{ url_for('index') }}">Clinvar Search  <i class="bi bi-search"></i> </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -26,7 +28,7 @@
         <li class="nav-item"><a class="nav-link" href="{{ url_for('patient_lookup') }}">Results</a></li>
       </ul>
 
-      <!-- Search form in navbar -->
+      <!-- Search form in navbar, still a work in progress, will hopefully involve query database -->
       <form class="d-flex" method="GET" action="{{ url_for('search_site') }}">
         <input class="form-control me-2" type="search" name="q" placeholder="Search..." aria-label="Search">
         <button class="btn btn-light" type="submit">Search</button>
@@ -34,7 +36,7 @@
     </div>
   </div>
 </nav>
-  <!-- Main content: child templates will fill this -->
+  <!-- Main content: the other pages will have this -->
   <div class="container mt-4">
     {% block content %}
     <!-- Default content (can be empty) -->

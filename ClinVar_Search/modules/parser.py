@@ -5,13 +5,20 @@ from pathlib import Path
 import csv
 import re
 #These modules read through the csv and vcf file in order to output a consistent sequence
-def csvparser(file_path: Path):
+def parser(file_path):
     variants = []
     misaligned_rows = []
     try:
-        with open(file_path, newline="") as csvfile:
-            csv_file = csv.reader(csvfile, delimiter=",")
-            for row in csv_file:
+        file_end = Path(file_path).suffix
+        if file_end == ".csv":
+            delimiter = ","
+        elif file_end == ".vcf":
+            delimiter = "\t"
+        else:
+            logger.error("Not csv or vcf! Check again")
+        with open(file_path, newline="") as parsefile:
+            parse_file = csv.reader(parsefile, delimiter=delimiter)
+            for row in parse_file:
                 if not row or row[0].startswith("#"):
                     continue
 
@@ -19,58 +26,6 @@ def csvparser(file_path: Path):
 
                 if len(row) >=5 :
                     chrom = row[0].strip() 
-                    pos = row[1].strip() 
-                    ref = row[3].strip() 
-                    alt = row[4].strip() 
-                 #remove "chr prefix" and then move on
-                    chrom = chrom.lstrip("chr")
-
-                if chrom and pos and ref and alt:
-                    variant = f"{chrom}-{pos}-{ref}-{alt}"
-                    variants.append(variant)
-                else:
-                    misaligned_row = f"incomplete or misalinged row {row}"
-                    misaligned_rows.append(misaligned_row)
-                    logger.error = (f"incomplete or misaligned row {row}")
-
-
-            csv_string = "\n".join(variants)
-            if misaligned_rows:
-                misaligned_string = "\n".join(misaligned_rows)
-                return csv_string, misaligned_string
-            else:
-                misaligned_string = ""
-                return csv_string, misaligned_string
-        
-
-    except Exception as e:
-        logger.error("Failed to parse csv file! {}" .format(e))
-        return None, None
-""""
-The expected inputs and outputs of this could, which parse through, a csv file, would involve 
-input:
-
-#CHROM,POS,ID,REF,ALT
-17,45983420,.,G,T
-output
-17-45983420-G-T
-"""
-
-
-def vcfparser(file_path: Path):
-    variants = []
-    misaligned_rows = []
-    try:
-        with open(file_path, newline="") as vcffile:
-            vcf_file = csv.reader(vcffile, delimiter="\t")
-            for row in vcf_file:
-                if not row or row[0].startswith("#"):
-                    continue
-
-                chrom = pos = ref = alt = None
-
-                if len(row) >=5 :
-                    chrom = row[0].strip()
                     pos = row[1].strip() 
                     ref = row[3].strip() 
                     alt = row[4].strip() 
@@ -86,61 +41,24 @@ def vcfparser(file_path: Path):
                     logger.error = (f"incomplete or misaligned row {row}")
 
 
-            vcf_string = "\n".join(variants)
+            parse_string = "\n".join(variants)
             if misaligned_rows:
                 misaligned_string = "\n".join(misaligned_rows)
-                return vcf_string, misaligned_string
+                return parse_string, misaligned_string
             else:
-                misaligned_string = ''
-                return vcf_string, misaligned_string
-
+                misaligned_string = ""
+                return parse_string, misaligned_string      
     except Exception as e:
-        logger.error ("Failed to parse VCF file!: {}" .format(e))
-        
+        logger.error("Failed to parse csv/vcf file! {}" .format(e))
         return None, None
 
-""""
-The expected inputs and outputs of this could, which parse through, a csv file, would involve 
-input:
-##fileformat=VCFv4.2				
-#CHROM	POS	ID	REF	ALT
-19	41970248	.	T	A
-
-output
-19-41970248-T-A
-"""
-
-
- #this function determines a file ending and then makes it so that the correct parser works with it. It needs a file that either ends with csv or vcf           
-def determine_file_type(file_path=str):
-    try:
-        file_path= input(f"which file would you like to read in?")
-        #This uses the path library to take the file title without the extension
-        title = Path(file_path).stem
-        #this evaluates the csv or vcf. If this is neither then an error occurs
-        if file_path.endswith(".csv"):
-            file_path = csvparser(Fileof)
-        elif file_path.endswith(".vcf"):
-            file_path = vcfparser(Fileof)
-        else:
-            logger.error(f"wrong file type! Make sure your file either ends with vcf or csv")
-            file_path = None
-            file_path = None
-    except Exception as e:
-            logger.error(f"wrong file type! Make sure your file either ends with vcf or csv")
-
-     
-    return file_path, title
-
-"""
-The goal now is to further edit the outputs of csvparser and vcfparser so that both outputs are:
-Have the same downstream input which will allow for only one stream of modules to work through
-This will allow the resulting output to always be compatible with HGVS compliant software which can do downstream analysis
-"""
-
-
 if __name__ == "__main__":
-    vcfparser("tests/test_files/Patient5.vcf")
-    csvparser("tests/test_files/Patient5.csv")
-                  
-
+    parse_string, misaligned_string = parser("tests/test_files/Patient5.csv")
+    print (parse_string)
+    print (misaligned_string)
+    parse_string, misaligned_string = parser("tests/test_files/Patient5.vcf")
+    print (parse_string)
+    print (misaligned_string)
+    parse_string, misaligned_string = parser("tests/test_files/Patient5.txt")
+    print (parse_string)
+    print (misaligned_string)

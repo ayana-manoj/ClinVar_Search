@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from flask import Flask, request, render_template, send_from_directory, jsonify, request, redirect, url_for
 from werkzeug.utils import secure_filename
-from ClinVar_Search.modules.parser import csvparser, vcfparser, determine_file_type,save_output_to_file 
+from ClinVar_Search.modules.parser import parser
 from ClinVar_Search.logger import logger
 
 
@@ -70,10 +70,8 @@ def app_file_check(file_path, overwrite=False):
     title = Path(file_path).stem
     saved_file = None
     misaligned_file = None
-    if file_end == ".csv":
-        processed_data, misaligned_data = csvparser(file_path)
-    elif file_end == ".vcf":
-        processed_data, misaligned_data = vcfparser(file_path)
+    if file_end == ".csv" or file_end == ".vcf":
+        processed_data, misaligned_data = parser(file_path)
     else:
         logger.error(f"Unsupported file type: {file_path}")
         return None, None, "unsupported file type"
@@ -94,11 +92,6 @@ def index():
 def search_site():
     return render_template("search_site.html")
 
-#Route for looking through results for a patient
-@Webapp.route("/results")
-def patient_lookup():
-    return render_template("patient_lookup.html")
-
 # Route for the upload file
 @Webapp.route("/upload")
 def upload_site():
@@ -113,7 +106,7 @@ def error_site():
 #Route for upload success
 @Webapp.route("/upload_success")
 def upload_success():
-    message = request.args.get ("message", "Have a coffee while you wait for your csv or vcf file to be annontated. It will be available in the results page linked below" )
+    message = request.args.get ("message", "Have a coffee while you wait for your csv or vcf file to be annotated. It will be available in the results page linked below" )
     return render_template("upload_success.html", message=message)
 """"This section will now focus on the functionality of each page of the site, """
 
@@ -156,15 +149,27 @@ def upload_file():
             # Process the file
             processed_file, misaligned_file, status = app_file_check(upload_path, overwrite=overwrite)
             #Error handling for if a filetype is either unsupported or if it has been skipped since overwrite was not selected
+
+
             if not processed_file and status != "skipped":
                 return redirect(url_for("error_site", message= "Unsupported file type"))
             elif not processed_file and status == "skipped":
                 return redirect(url_for("error_site", message= " file already exists and was not overwritten"))
+            
+
             #handling redirects for if misaligned file exists and if overwrite has been selected or not
-            if misaligned_file and status != "overwritten":
-                return redirect(url_for("error_site", message = f"{filename} was successfully processed, but there was an error with your input. Check misaligned files at {Error_folder}"))
-            elif misaligned_file:
-                return redirect(url_for("error_site", message = f"{filename} was successfully overwritten and processed, but there was an error with your input. Check misaligned files at {Error_folder}"))
+            if processed_file and misaligned_file:
+                if status == "created":
+                    return redirect(url_for("error_site", message = f"{filename} was successfully created and processed, but there was an error with your input. Check misaligned files at {Error_folder}"))
+                elif status == "overwritten":
+                    return redirect(url_for("error_site", message = f"{filename} was successfully overwritten, but there was an error with your input. Check misaligned files at {Error_folder}"))
+           
+            #handling successful uploads and changing messages depending on status of overwrite    
+            if processed_file and not misaligned_file:
+                if status == "created":
+                    return redirect(url_for("upload_success"))
+                elif status == "overwritten":
+                    return redirect(url_for("upload_success", message = f"{filename} was successfully overwritten"))
             return redirect(url_for("upload_success"))
     #If file type isn't allowed, return an error
         return redirect(url_for("error_site", message= "Invalid filetype"))
@@ -179,6 +184,45 @@ def upload_file():
 def download_file(filename):
     return send_from_directory(Webapp.config['Processed_folder'], filename)
 
+#route to show patient results
+""""In this page we will be looking at the results of processed data
+There are currently two sections, the database results and the processed data
+The processed data will show how the data has been processed, with the latest patient shown first
+This can give scientists the chance to see if the number of variants match up while also showing what our inputs for the API should look like
+"""
+@Webapp.route("/results")
+def patient_lookup():
+    try:
+
+        db_results = []
+    except:
+        db_results = []
+    
+    if os.path.exists(Processed_folder):
+        files = [file for file in os.listdir(Processed_folder)
+                 if os.path.isfile(os.path.join(Processed_folder,file))]
+        files = sorted(
+            files,
+            key= lambda file: os.path.getmtime(os.path.join(Processed_folder, file)),
+            reverse=True
+        )
+    else:
+        files = []
+
+    return render_template("patient_lookup.html", db_results=db_results, files=files)
+
+@Webapp.route("/view_file",  methods=["GET"])
+def read_file():
+    filename = request.args.get("filename")
+    if not filename:
+        return  "No file selected!", 400
+    
+    viewed_file = os.path.join(Processed_folder, filename)
+    if not os.path.exists(viewed_file):
+        return "File not found, please refresh and try again."
+    with open(viewed_file, "r", encoding="utf-8") as f:
+        content = f.read()
+    return content
 # Run the application
 if __name__ == "__main__":
     Webapp.run(debug=True)

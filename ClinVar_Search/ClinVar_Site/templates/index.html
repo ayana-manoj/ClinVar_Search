@@ -50,7 +50,7 @@
 
 
   <div class="header-section mb-4">
-    <h1> Welcome to ClinVar Search! 🔎</h1>
+    <h1> Welcome to ClinVar Search! <i class= "bi bi-search"></i></h1>
     <p class="lead">Choose below whether you want to upload and process your data, search through your latest run or a query your database for past results!</p>
   </div>
 
@@ -59,7 +59,7 @@
     <div class="col-md-4">
       <div class="card h-100 text-center shadow-sm">
         <div class="card-body">
-          <h4 class="card-title text-primary">🗃️ Upload Files</h4>
+          <h4 class="card-title text-primary"> Upload Files <i class="bi bi-save"></i> </h4>
           <p class="card-text text-muted">Upload and process your VCF and CSV files easily using our drag and drop menu!</p>
           <a href="{{ url_for('upload_site') }}" class="btn btn-primary">Go to Upload</a>
         </div>
@@ -70,7 +70,7 @@
     <div class="col-md-4">
       <div class="card h-100 text-center shadow-sm">
         <div class="card-body">
-          <h4 class="card-title text-success">🗄️ Search Data</h4>
+          <h4 class="card-title text-success">Search Data <i class ="bi bi-database"></i></h4>
           <p class="card-text text-muted">Search through your uploaded files and explore their contents quickly.</p>
           <a href="{{ url_for('search_site') }}" class="btn btn-success">Go to Search</a>
         </div>
@@ -81,9 +81,9 @@
     <div class="col-md-4">
       <div class="card h-100 text-center shadow-sm">
         <div class="card-body">
-          <h4 class="card-title text-danger">🔎 View Results of processing</h4>
+          <h4 class="card-title text-warning">View Results of processing <i class ="bi bi-search"></i></h4>
           <p class="card-text text-muted">See processed outputs.</p>
-          <a href="{{ url_for('patient_lookup') }}" class="btn btn-danger">View Results</a>
+          <a href="{{ url_for('patient_lookup') }}" class="btn btn-warning">View Results</a>
         </div>
       </div>
     </div>

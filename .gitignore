@@ -13,3 +13,4 @@ ClinVar_Search/ClinVar_Site/secret.py
 tests/test_files
 ClinVar_Search/ClinVar_Site/Clinvar_Error_Outputs
 ClinVar_Search/ClinVar_Site/oldapp.py
+tests/test_parser.py

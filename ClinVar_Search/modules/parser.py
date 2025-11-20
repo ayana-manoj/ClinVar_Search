@@ -36,7 +36,7 @@ def parser(file_path):
                     variant = f"{chrom}-{pos}-{ref}-{alt}"
                     variants.append(variant)
                 else:
-                    misaligned_row = f"incomplete or misalinged row {row}"
+                    misaligned_row = f"incomplete or misaligned row {row}"
                     misaligned_rows.append(misaligned_row)
                     logger.error = (f"incomplete or misaligned row {row}")
 

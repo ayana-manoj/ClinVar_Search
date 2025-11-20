@@ -50,14 +50,14 @@ def test_vcf_parser_no_file():
 def test_csv_parser_misaligned_files():
     csv_file = ("tests/test_files/Patient5.csv")
     expected_processed_file = "12-40294866-G-T\n1-7977728-G-C\n1-7984944-A-G\n1-7965425-G-C\n6-162262690-T-C\n17-44349727-G-A\n17-44349226-C-T\n6-162727667-A-G\n6-162262619-G-T"
-    expected_misaligned_file = "incomplete or misalinged row ['12', '40310486', 'C']"
+    expected_misaligned_file = "incomplete or misaligned row ['12', '40310486', 'C']"
     process_result, misaligned_result = parser(csv_file)
     assert (process_result, misaligned_result) == (expected_processed_file, expected_misaligned_file)
 
 def test_vcf_parser_misaligned_files():
     vcf_file = ("tests/test_files/Patient5.vcf")
     expected_processed_file = "12-40294866-G-T\n1-7977728-G-C\n1-7984944-A-G\n1-7965425-G-C\n6-162262690-T-C\n17-44349727-G-A\n17-44349226-C-T\n6-162727667-A-G\n6-162262619-G-T" 
-    expected_misaligned_file = "incomplete or misalinged row ['12', '40310486', 'C']"
+    expected_misaligned_file = "incomplete or misaligned row ['12', '40310486', 'C']"
     process_result, misaligned_result = parser(vcf_file)
     assert (process_result, misaligned_result) == (expected_processed_file, expected_misaligned_file)
 

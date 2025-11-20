@@ -63,12 +63,26 @@
       </ul>
 
       <!-- Latest File List -->
-      <h3 class="mt-4 text-primary">Latest Patient processed</h3>
+      <h3 class="mt-4 text-primary">Patients processed</h3>
       <ul class="list-group">
         {% if files %}
           {% for file in files %}
             <li class="list-group-item">
-             <a href="#" class="file-link" data-filename="{{ file }}">{{ file }}</a>
+             <a href="#" class="file-link-1" data-fileprocess="{{ file }}">{{ file }}</a>
+            </li>
+          {% endfor %}
+        {% else %}
+          <li class="list-group-item text-muted">No files found.</li>
+        {% endif %}
+      </ul>
+
+      <!-- Error List -->
+      <h3 class="mt-4 text-primary">Error files, please check</h3>
+      <ul class="list-group">
+        {% if misaligned %}
+          {% for f in misaligned %}
+            <li class="list-group-item">
+             <a href="#" class="file-link-2" data-filemisalign="{{ f }}">{{ f }}</a>
             </li>
           {% endfor %}
         {% else %}
@@ -79,49 +93,104 @@
   </div>
 </div>
 
+
 <!-- Bootstrap Modal -->
-<div class="modal fade" id="fileModal" tabindex="-1" aria-labelledby="fileModalLabel" aria-hidden="true">
+<div class="modal fade" id="fileModal1" tabindex="-1" aria-labelledby="fileModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="fileModalLabel">File Content</h5>
+        <h5 class="modal-title" id="fileModalLabel1">File Content</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <pre id="fileContent" style="white-space: pre-wrap;"></pre>
+        <pre id="fileContent1" style="white-space: pre-wrap;"></pre>
       </div>
     </div>
   </div>
 </div>
 
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="fileModal2" tabindex="-1" aria-labelledby="fileModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="fileModalLabel2">File Content</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <pre id="fileContent2" style="white-space: pre-wrap;"></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-  const modal = new bootstrap.Modal(document.getElementById('fileModal'));
-  const fileContent = document.getElementById('fileContent');
-  const modalTitle = document.getElementById('fileModalLabel');
+  //elements for the processed data modal
+  const modal1 = new bootstrap.Modal(document.getElementById('fileModal1'));
+  const fileContent1 = document.getElementById('fileContent1');
+  const modalTitle1 = document.getElementById('fileModalLabel1');
+  
+  //elements for the misaligned data modal
 
-  document.querySelectorAll('.file-link').forEach(link => {
+  const modal2 = new bootstrap.Modal(document.getElementById('fileModal2'));
+  const fileContent2 = document.getElementById('fileContent2');
+  const modalTitle2 = document.getElementById('fileModalLabel2');
+
+  
+  document.querySelectorAll('.file-link-1').forEach(link => {
     link.addEventListener('click', function(e) {
       e.preventDefault();
-      const filename = this.dataset.filename;  // <- this must match your folder
+      const fileprocess = this.dataset.fileprocess  // <- this must match your folder
 
-      fetch(`/view_file?filename=${encodeURIComponent(filename)}`)
+      fetch(`/view_file?fileprocess=${encodeURIComponent(fileprocess)}`)
         .then(response => {
-          if (!response.ok) throw new Error("File not found.");
-          return response.text();
+          if (!response.ok)
+            throw new Error("File not found.");
+          // Delay before sending response so that file not found error doesn't happen
+          return new Promise(resolve => {
+            setTimeout(() => resolve(response.text()), 200);
+          });
         })
         .then(data => {
-          modalTitle.textContent = filename;
-          fileContent.textContent = data;
-          modal.show();
+          modalTitle1.textContent = fileprocess;
+          fileContent1.textContent = data;
+          modal1.show();
         })
         .catch(err => {
-          fileContent.textContent = "Error loading file: " + err;
-          modal.show();
+          fileContent1.textContent = "Error loading file: " + err;
+          modal1.show();
         });
     });
-  });
 });
+
+
+  document.querySelectorAll('.file-link-2').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const filemisalign = this.dataset.filemisalign// <- this must match your folder
+
+fetch(`/view_misalign?filemisalign=${encodeURIComponent(filemisalign)}`)
+        .then(response => {
+          if (!response.ok) throw new Error("File not found.");
+          // Delay before sending response so that file not found error doesn't happen
+          return new Promise(resolve => {
+            setTimeout(() => resolve(response.text()), 500);
+          });          
+        })
+        .then(misdata => {
+          modalTitle2.textContent = filemisalign;
+          fileContent2.textContent = misdata;
+          modal2.show();
+        })
+        .catch(err => {
+          fileContent2.textContent = "Error loading file: " + err;
+          modal2.show(); 
+        });
+    });
+    });
+  });
 </script>
 
 {% endblock %}

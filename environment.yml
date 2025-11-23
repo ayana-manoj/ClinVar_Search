@@ -9,3 +9,4 @@ dependencies:
   - flask
   - dicttoxml
   - flask-restx
+  - requests

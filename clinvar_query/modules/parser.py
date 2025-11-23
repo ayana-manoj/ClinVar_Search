@@ -1,6 +1,6 @@
 #if ClinVar_Search is not found as a module (ModuleNotFoundError), add this project to python path using export PYTHONPATH=/path/to/project/ClinVar_Search:$PYTHONPATH
-from ClinVar_Search.logger import logger
-from ClinVar_Search.modules.save_function import save_output_to_file
+from clinvar_query.logger import logger
+from clinvar_query.modules.save_function import save_output_to_file
 from pathlib import Path
 import csv
 import re

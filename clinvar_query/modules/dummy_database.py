@@ -12,12 +12,6 @@ def sql_database():
                 FOREIGN KEY (id_test_type) REFERENCES patient_information (id_test_type)
             );""",
 
-        """CREATE TABLE IF NOT EXISTS ClinVar (
-                mane_select VARCHAR PRIMARY KEY,
-                consensus_classification VARCHAR,
-                FOREIGN KEY (mane_select) REFERENCES variant_info (mane_select)
-            );""",
-
         """CREATE TABLE IF NOT EXISTS variant_info (
                 variant_id VARCHAR PRIMARY KEY,
                 chromosome INTEGER,
@@ -25,6 +19,12 @@ def sql_database():
                 gene_symbol VARCHAR,
                 mane_select VARCHAR,
                 FOREIGN KEY (variant_id) REFERENCES variants (variant_id)
+            );""",
+            
+        """CREATE TABLE IF NOT EXISTS clinvar (
+                mane_select VARCHAR PRIMARY KEY,
+                consensus_classification VARCHAR,
+                FOREIGN KEY (mane_select) REFERENCES variant_info (mane_select)
             );"""
 
     ]
@@ -74,7 +74,7 @@ def initialise_dummy_variables():
         """      
     ]
     SQL_statements_4 = [
-        """INSERT INTO ClinVar (mane_select, consensus_classification)
+        """INSERT INTO clinvar (mane_select, consensus_classification)
         VALUES
         ("NM_198578.4:c.2830G>T", "not provided, 0 stars"),
         ("NM_004562.3:c.247A>G", "Uncertain significance, 2 stars"),

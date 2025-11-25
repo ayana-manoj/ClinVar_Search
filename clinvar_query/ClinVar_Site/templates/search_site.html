@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Search{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+  {% if empty_query %}
+    <div class="alert alert-info">Please enter a search term.</div>
+  {% elif no_results %}
+    <div class="alert alert-warning">No results found for "{{ query_data }}".</div>
+  {% else %}
+    <div class="alert alert-success mb-4">
+      Found results in {{ data_found }} table{{ 's' if data_found > 1 else '' }} for "{{ query_data }}"
+    </div>
+  {% endif %}
+
+  {% for table, result in data.items() %}
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header bg-primary text-white">
+        Results in {{ table }}
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                {% for col in result.columns %}
+                  <th>{{ col|capitalize }}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in result.rows %}
+                <tr>
+                  {% for col in result.columns %}
+                    <td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                      {{ row[col] }}
+                    </td>
+                  {% endfor %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+
+</div>
+{% endblock %}

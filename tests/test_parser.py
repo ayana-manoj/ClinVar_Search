@@ -1,5 +1,5 @@
-from ClinVar_Search.modules.parser import parser
-from ClinVar_Search.logger import logger
+from clinvar_query.modules.parser import parser
+from clinvar_query.logger import logger
 from pathlib import Path
 import pytest
 def test_csv_parser():
@@ -65,7 +65,7 @@ def test_vcf_parser_misaligned_files():
 def test_csv_parser_misaligned_files_fail_misalign():
     csv_file = ("tests/test_files/Patient5.csv")
     expected_processed_file = "12-40294866-G-T\n1-7977728-G-C\n1-7984944-A-G\n1-7965425-G-C\n6-162262690-T-C\n17-44349727-G-A\n17-44349226-C-T\n6-162727667-A-G\n6-162262619-G-T"
-    expected_misaligned_file = "incomplete or misalinged row ['12', '40310486', 'C']"
+    expected_misaligned_file = "incomplete or misaligned row ['12', '40310486', 'C']"
     process_result, misaligned_result = parser(csv_file)
     with pytest.raises(AssertionError):
         assert (process_result, misaligned_result) == (expected_processed_file, None)
@@ -73,7 +73,7 @@ def test_csv_parser_misaligned_files_fail_misalign():
 def test_vcf_parser_misaligned_files_fail_misalign():
     vcf_file = ("tests/test_files/Patient5.vcf")
     expected_processed_file = "12-40294866-G-T\n1-7977728-G-C\n1-7984944-A-G\n1-7965425-G-C\n6-162262690-T-C\n17-44349727-G-A\n17-44349226-C-T\n6-162727667-A-G\n6-162262619-G-T" 
-    expected_misaligned_file = "incomplete or misalinged row ['12', '40310486', 'C']"
+    expected_misaligned_file = "incomplete or misaligned row ['12', '40310486', 'C']"
     process_result, misaligned_result = parser(vcf_file)
     with pytest.raises(AssertionError):
         assert (process_result, misaligned_result) == (expected_processed_file, None)    
@@ -81,7 +81,7 @@ def test_vcf_parser_misaligned_files_fail_misalign():
 def test_csv_parser_process_files_fail_misalign():
     csv_file = ("tests/test_files/Patient5.csv")
     expected_processed_file = "12-40294866-G-T\n1-7977728-G-C\n1-7984944-A-G\n1-7965425-G-C\n6-162262690-T-C\n17-44349727-G-A\n17-44349226-C-T\n6-162727667-A-G\n6-162262619-G-T"
-    expected_misaligned_file = "incomplete or misalinged row ['12', '40310486', 'C']"
+    expected_misaligned_file = "incomplete or misaligned row ['12', '40310486', 'C']"
     process_result, misaligned_result = parser(csv_file)
     with pytest.raises(AssertionError):
         assert (process_result, misaligned_result) == (None, expected_misaligned_file)
@@ -93,3 +93,4 @@ def test_vcf_parser_process_files_fail_misalign():
     process_result, misaligned_result = parser(vcf_file)
     with pytest.raises(AssertionError):
         assert (process_result, misaligned_result) == (None, expected_misaligned_file)    
+

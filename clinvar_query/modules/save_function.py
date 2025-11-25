@@ -2,7 +2,7 @@ import csv
 import re
 import os
 import pathlib as Path
-from ClinVar_Search.logger import logger
+from clinvar_query.logger import logger
 #This function saves a file in a specified directory 
 def save_output_to_file(Fileof=str, title=str, overwrite: bool = False):
     """"This is adapted from some code I wrote a while ago that I used for the UniPyProject among other projects

@@ -1,145 +1,139 @@
-"""
-clinvar_api_query.py
-------------------------
-Query ClinVar using HGVS **c. notation**, with caching.
-Returns conditions, classification, star rating, etc.
-
-This script expects HGVS c. strings with transcript, e.g.:
-    NM_000059.4:c.7397C>T
-"""
-
+import json
 import requests
-from diskcache import Cache
+import time
+import os
 from pathlib import Path
+from clinvar_query.logger import logger
 
-# Persistent cache directory
-CACHE_DIR = Path(__file__).resolve().parent / "cache"
-CACHE_DIR.mkdir(exist_ok=True)
-cache = Cache(CACHE_DIR)
-
-
-# -------------------------------------------------------------------
-# Convert ClinVar review status → star rating
-# -------------------------------------------------------------------
-def extract_star_rating(review_status: str) -> str:
-    """Convert ClinVar review_status to readable star rating."""
-    if not review_status:
-        return "No review status available"
-
-    stars_map = {
-        "practice guideline": "★★★★",
-        "reviewed by expert panel": "★★★",
-        "criteria provided, multiple submitters, no conflicts": "★★",
-        "criteria provided, single submitter": "★",
-        "no assertion criteria provided": "☆"
-    }
-
-    review_status_lower = review_status.lower()
-    for key, stars in stars_map.items():
-        if key.lower() in review_status_lower:
-            return f"{stars} ({review_status})"
-
-    return review_status
+# ----------------- NCBI E-utilities URLs -----------------
+ESUMMARY_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
+ESEARCH_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
 
 
-# -------------------------------------------------------------------
-# MAIN FUNCTION: Query ClinVar by HGVS c. notation
-# -------------------------------------------------------------------
-def query_clinvar_by_hgvs_c(hgvs_c: str) -> dict | None:
+# ----------------- Functions -----------------
+def search_clinvar(hgvs: str) -> list:
     """
-    Query ClinVar using an HGVS c. notation string (with transcript), e.g.:
+    Search ClinVar for a given HGVS variant and return ClinVar IDs (RCV IDs).
 
-        'NM_000059.4:c.7397C>T'
+    Parameters
+    ----------
+    hgvs : str
+        HGVS string representing the genomic variant.
 
-    ClinVar supports c. HGVS in ESearch queries.
-
-    Returns:
-        Dict with classification, conditions, review status, MANE transcripts, etc.
-        OR None if not found.
+    Returns
+    -------
+    list
+        A list of ClinVar RCV IDs matching the HGVS variant.
+        Returns an empty list if no IDs are found or an error occurs.
     """
-
-    # Use cache if available
-    if hgvs_c in cache:
-        return cache[hgvs_c]
-
-    # ------------------------------
-    # Step 1) ESearch for ClinVar ID
-    # ------------------------------
-    esearch_url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
-    esearch_params = {
-        "db": "clinvar",
-        "term": hgvs_c,
-        "retmode": "json"
-    }
-
+    params = {"db": "clinvar", "term": hgvs, "retmode": "json"}
     try:
-        response = requests.get(esearch_url, params=esearch_params, timeout=10)
+        response = requests.get(ESEARCH_URL, params=params)
         response.raise_for_status()
         data = response.json()
+        # Extract list of ClinVar IDs from the JSON response
+        return data.get("esearchresult", {}).get("idlist", [])
     except Exception as e:
-        print(f"ClinVar ESearch error for {hgvs_c}: {e}")
-        return None
+        logger.error(f"Error searching ClinVar for {hgvs}: {e}")
+        return []
 
-    idlist = data.get("esearchresult", {}).get("idlist", [])
-    if not idlist:
-        cache[hgvs_c] = None
-        return None
 
-    clinvar_id = idlist[0]
+def get_esummary(clinvar_ids: list) -> dict:
+    """
+    Fetch ClinVar esummary information for a list of ClinVar IDs.
 
-    # ------------------------------
-    # Step 2) Fetch variant summary
-    # ------------------------------
-    esummary_url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
-    esummary_params = {
-        "db": "clinvar",
-        "id": clinvar_id,
-        "retmode": "json"
-    }
+    Parameters
+    ----------
+    clinvar_ids : list
+        List of ClinVar RCV IDs to fetch summaries for.
 
+    Returns
+    -------
+    dict
+        JSON dictionary containing the ClinVar esummary results.
+        Returns an empty dictionary if no IDs are provided or an error occurs.
+    """
+    if not clinvar_ids:
+        return {}
+
+    params = {"db": "clinvar", "id": ",".join(clinvar_ids), "retmode": "json"}
     try:
-        summary_response = requests.get(esummary_url, params=esummary_params, timeout=10)
-        summary_response.raise_for_status()
-        summary = summary_response.json()
+        response = requests.get(ESUMMARY_URL, params=params)
+        response.raise_for_status()
+        return response.json().get("result", {})
     except Exception as e:
-        print(f"ClinVar ESummary error for ID {clinvar_id}: {e}")
-        return None
+        logger.error(f"Error getting esummary for IDs {clinvar_ids}: {e}")
+        return {}
 
-    result = summary.get("result", {}).get(clinvar_id, {})
-    if not result:
-        cache[hgvs_c] = None
-        return None
 
-    # ------------------------------
-    # Extract output fields
-    # ------------------------------
-    traits = result.get("trait_set", [])
-    conditions = [t.get("trait_name") for t in traits if t.get("trait_name")]
+# ----------------- Main Processing -----------------
+# Define input and output directories
+input_dir = "vv_search_output_files"
+output_dir = "clinvar_results"
+os.makedirs(output_dir, exist_ok=True)
 
-    output = {
-        "variation_id": result.get("uid"),
-        "title": result.get("title"),
-        "clinical_significance": result.get("clinical_significance", {}).get("description"),
-        "classification": result.get("clinical_significance", {}).get("description"),
-        "review_status": extract_star_rating(result.get("review_status")),
-        "conditions": conditions,
-        "genes": [g["symbol"] for g in result.get("gene", [])] if result.get("gene") else [],
-        "last_updated": result.get("updated"),
-        "mane_transcripts": [],
-    }
+# List all JSON files in the input directory
+json_files = list(Path(input_dir).glob("*.json"))
+if not json_files:
+    logger.warning(f"No JSON files found in directory {input_dir}")
 
-    # MANE transcripts
-    mane_data = result.get("mane")
-    if mane_data:
-        for entry in mane_data:
-            if "nucleotide_accession" in entry:
-                acc = entry["nucleotide_accession"]
-                ver = entry.get("nucleotide_version", "")
-                output["mane_transcripts"].append(f"{acc}.{ver}")
+# Iterate over each JSON file
+for input_file in json_files:
+    logger.info(f"Processing file: {input_file.name}")
 
-    # Save to cache
-    cache[hgvs_c] = output
+    # Load variant data from JSON file
+    try:
+        with open(input_file) as f:
+            variants_data = json.load(f)
+    except Exception as e:
+        logger.error(f"Failed to load JSON file {input_file}: {e}")
+        continue
 
-    return output
+    results = []
+
+    # Iterate over each variant entry in the JSON file
+    for entry in variants_data:
+        variant_str = entry.get("variant")
+        if not variant_str:
+            logger.warning("Variant entry missing 'variant' field, skipping.")
+            continue
+
+        # Extract the g_hgvs notation from the nested structure
+        try:
+            variant_result = entry["result"][variant_str][variant_str]
+            g_hgvs = variant_result.get("g_hgvs")
+        except KeyError:
+            g_hgvs = None
+
+        if not g_hgvs:
+            logger.warning(f"No g_hgvs found for {variant_str}, skipping.")
+            continue
+
+        # Search ClinVar using HGVS notation
+        logger.info(f"Searching ClinVar for HGVS: {g_hgvs}")
+        clinvar_ids = search_clinvar(g_hgvs)
+        summary = get_esummary(clinvar_ids)
+
+        # Append results to the output list
+        results.append({
+            "variant": variant_str,
+            "g_hgvs": g_hgvs,
+            "clinvar_ids": clinvar_ids,
+            "esummary": summary
+        })
+
+        # Respect NCBI API guidelines by adding a small delay
+        time.sleep(0.3)
+
+    # Save results to output directory with the same filename
+    output_file = Path(output_dir) / input_file.name
+    try:
+        with open(output_file, "w") as f:
+            json.dump(results, f, indent=2)
+        logger.info(f"Results saved to {output_file}")
+    except Exception as e:
+        logger.error(f"Failed to save results for {input_file.name}: {e}")
+
+logger.info("All files processed successfully.")
 
 

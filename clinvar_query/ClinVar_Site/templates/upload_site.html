@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Clinvar Upload{% endblock %}
+
+{% block content %}
+  <style>
+    /* Card with hover lift effect */
+    .card {
+      border: none;
+      border-radius: 1rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(13, 110, 253, 0.25);
+    }
+
+    /* Drag-and-drop zone styling */
+    #drop_zone {
+      border: 2px dashed #0d6efd; /* Bootstrap primary color */
+      border-radius: 10px;
+      padding: 40px;
+      text-align: center;
+      color: #6c757d; /* Bootstrap's secondary text color */
+      cursor: pointer;
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    #drop_zone.dragover {
+      background-color: #e7f1ff;
+      border-color: #0a58ca;
+    }
+  </style>
+
+
+
+  <div class="container">
+    <div class="card shadow-sm mx-auto" style="max-width: 600px;">
+      <div class="card-body">
+        <h1 class="card-title mb-4 text-center text-primary">Upload Your File</h1>
+        <p class = "text-secondary mb-4">
+            Please upload your data in either a CSV or VCF format!
+            You can drag and drop the file or click to choose one.
+        </p>
+        <!-- Upload form -->
+        <form
+  id="upload_form"
+  method="POST"
+  action="{{ url_for('upload_file') }}"
+  enctype="multipart/form-data"
+>
+          <!-- Drag-and-drop area -->
+          <div id="drop_zone" class="mb-3">
+            <p class="mb-0"><i class="bi bi-folder"></i> Drag and drop your file here, or click to select </p>
+            <input type="file" name="file" id="file_input" class="form-control mt-3" required hidden>
+          </div>
+
+          <!-- Overwrite checkbox -->
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="overwrite" name="overwrite">
+            <label class="form-check-label" for="overwrite">
+              Allow overwriting existing files
+            </label>
+          </div>
+
+          <!-- Submit button -->
+          <div class="d-grid">
+            <button id="upload_btn" class="btn btn-primary" disabled>Upload</button>
+          </div>
+        </form>
+
+        <p id="file_message" class="mt-2 text-center text-secondary"></p>
+
+        <!-- Status message -->
+        <div id="status_message" class="mt-3 text-center fw-semibold"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+  <script>
+
+  // DOM references
+  const fileInput = document.getElementById('file_input');
+  const dropZone = document.getElementById('drop_zone');
+  const uploadBtn = document.getElementById('upload_btn');
+  const fileMessage = document.getElementById('file_message');
+
+  // Handle file selection / dropping
+  function handleFiles(files) {
+    if (files.length > 0) {
+      fileMessage.textContent = `File selected: ${files[0].name}. Press Upload to continue.`;
+      uploadBtn.disabled = false;      // The upload button is disable by default, this ensure that only uploading a file will allow you to submit it for processing
+      fileInput.files = files;         // 
+    } else {
+      fileMessage.textContent = "";
+      uploadBtn.disabled = true;       // This ensure form resubmission doesn't happen
+    }
+  }
+
+  // Highlight drop zone on drag
+  dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+  });
+
+  dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('dragover');
+  });
+
+  // Handle file drop
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+
+    const files = e.dataTransfer.files;   // get dropped files
+    handleFiles(files);                    // process files using the Handle files function
+  });
+
+  // Click-to-open file picker
+  dropZone.addEventListener('click', () => {
+    fileInput.click();
+  });
+
+  // Handle file selected via picker
+  fileInput.addEventListener('change', () => {
+    handleFiles(fileInput.files);
+  });
+</script>
+{% endblock %}

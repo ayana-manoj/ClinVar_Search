@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Clinvar Patient Lookup{% endblock %}
+
+{% block content %}
+ <style>
+    .header-section {
+      background: linear-gradient(270deg, #0d6efd, #6610f2, #d63384);
+      background-size: 600% 600%;
+      color: white;
+      padding: 3rem 1rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+      animation: gradientShift 8s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .header-section h1 {
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Card with hover lift effect */
+    .card {
+      border: none;
+      border-radius: 1rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(13, 110, 253, 0.25);
+    }
+    </style>
+    
+
+<div class="container">
+  <div class="card shadow-sm mx-auto" style="max-width: 600px;">
+    <div class="card-body">
+      <h1 class="card-title mb-4 text-center text-primary">View Results here</h1>
+      <p class="text-secondary mb-4">
+        Here is where you can see your latest results.
+        Click on either list to get insights into your data.
+      </p>
+
+      <!-- Database List -->
+<h3 class="mt-4 text-primary">Latest Patient Result</h3>
+
+    <ul class="list-group">
+      {%if latest%}
+        {% for col in latest.keys() %}
+          <li class="list-group-item d-flex justify-content-between">
+            <strong>{{ col }}</strong>
+            <span>{{ latest[col] }}</span>
+          </li>
+        {% endfor %}
+      {%else%}
+        <li class="list-group-item text-muted"> No data found.</li>
+      {% endif %}
+        </ul>
+
+
+      <!-- Latest File List -->
+      <h3 class="mt-4 text-primary">Patients processed</h3>
+      <ul class="list-group">
+        {% if files %}
+          {% for file in files %}
+            <li class="list-group-item">
+             <a href="#" class="file-link-1" data-fileprocess="{{ file }}">{{ file }}</a>
+            </li>
+          {% endfor %}
+        {% else %}
+          <li class="list-group-item text-muted">No files found.</li>
+        {% endif %}
+      </ul>
+
+      <!-- Error List -->
+      <h3 class="mt-4 text-primary">Error files, please check</h3>
+      <ul class="list-group">
+        {% if misaligned %}
+          {% for f in misaligned %}
+            <li class="list-group-item">
+             <a href="#" class="file-link-2" data-filemisalign="{{ f }}">{{ f }}</a>
+            </li>
+          {% endfor %}
+        {% else %}
+          <li class="list-group-item text-muted">No files found.</li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal for Processed patient files -->
+<div class="modal fade" id="fileModal1" tabindex="-1" aria-labelledby="fileModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="fileModalLabel1">File Content</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <pre id="fileContent1" style="white-space: pre-wrap;"></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for Error files -->
+<div class="modal fade" id="fileModal2" tabindex="-1" aria-labelledby="fileModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="fileModalLabel2">File Content</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <pre id="fileContent2" style="white-space: pre-wrap;"></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  //elements for the processed data modal
+  const modal1 = new bootstrap.Modal(document.getElementById('fileModal1'));
+  const fileContent1 = document.getElementById('fileContent1');
+  const modalTitle1 = document.getElementById('fileModalLabel1');
+  
+  //elements for the misaligned data modal
+
+  const modal2 = new bootstrap.Modal(document.getElementById('fileModal2'));
+  const fileContent2 = document.getElementById('fileContent2');
+  const modalTitle2 = document.getElementById('fileModalLabel2');
+
+  
+  document.querySelectorAll('.file-link-1').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const fileprocess = this.dataset.fileprocess  // <- this must match your folder
+
+      fetch(`/view_file?fileprocess=${encodeURIComponent(fileprocess)}`)
+        .then(response => {
+          if (!response.ok)
+            throw new Error("File not found.");
+          // Delay before sending response so that file not found error doesn't happen, set to a tiny delay at the moment can scale up
+          return new Promise(resolve => {
+            setTimeout(() => resolve(response.text()), 10);
+          });
+        })
+        .then(data => {
+          modalTitle1.textContent = fileprocess;
+          fileContent1.textContent = data;
+          modal1.show();
+        })
+        .catch(err => {
+          fileContent1.textContent = "Error loading file: " + err;
+          modal1.show();
+        });
+    });
+});
+
+
+  document.querySelectorAll('.file-link-2').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const filemisalign = this.dataset.filemisalign// <- this must match your folder
+
+fetch(`/view_misalign?filemisalign=${encodeURIComponent(filemisalign)}`)
+        .then(response => {
+          if (!response.ok) throw new Error("File not found.");
+          // Delay before sending response so that file not found error doesn't happen
+          return new Promise(resolve => {
+            setTimeout(() => resolve(response.text()), 10);
+          });          
+        })
+        .then(misdata => {
+          modalTitle2.textContent = filemisalign;
+          fileContent2.textContent = misdata;
+          modal2.show();
+        })
+        .catch(err => {
+          fileContent2.textContent = "Error loading file: " + err;
+          modal2.show(); 
+        });
+    });
+    });
+  });
+</script>
+
+{% endblock %}

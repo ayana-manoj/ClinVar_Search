@@ -135,5 +135,3 @@ for input_file in json_files:
         logger.error(f"Failed to save results for {input_file.name}: {e}")
 
 logger.info("All files processed successfully.")
-
-

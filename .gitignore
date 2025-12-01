@@ -1,7 +1,21 @@
 Parkfiles
-Clinvar_Search.egg-info
-ClinVar_Search/__pycache__
 logs
-Clinvar_Search_Output_Files
+ClinVar_Search/modules/__pycache__
+examples
+.vscode
+tests/__pycache__
+
+tests/test_files
+
+clinvar_query/__pycache__
 clinvar_query/modules/__pycache__
+Clinvar_Search_Output_Files
+Clinvar_Search.egg-info
+clinvar_query/ClinVar_Site/database_folder
+clinvar_query/ClinVar_Site/error_folder
+clinvar_query/ClinVar_Site/processed_folder
+clinvar_query/ClinVar_Site/upload_folder
+.pytest_cache
+
+
 

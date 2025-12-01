@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Search{% endblock %}
+
+{% block content %}
+  {% if empty_query %}
+    <div class="alert alert-info">Please enter a search term.</div>
+  {% elif not results %}
+    <p>No matches found for "{{ query_data }}"</p>
+  {% else %}
+    {% for table, data in results.items() %}
+      <h4>Table: {{ table }}</h4>
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            {% for col in data.columns %}
+              <th>{{ col }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in data.rows %}
+            <tr>
+              {% for col in data.columns %}
+                <td>{{ row[col] }}</td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endfor %}
+  {% endif %}
+
+</div>
+{% endblock %}

@@ -1,144 +1,137 @@
-"""
-clinvar_api_query.py
-------------------------
-This script queries the NCBI ClinVar API to find variant information
-based on chromosome number, genomic position, and nucleotide change.
-
-It uses NCBI’s E-utilities (ESearch + ESummary) to search ClinVar data.
-
-Now includes:
-- MANE transcript(s)
-- ClinVar star ratings (review status)
-
-Example:
-    python clinvar_variant_query.py --chrom 7 --position 140453136 --change C>T
-"""
-
+import json
 import requests
-import argparse
+import time
+import os
+from pathlib import Path
+from clinvar_query.logger import logger
+
+# ----------------- NCBI E-utilities URLs -----------------
+ESUMMARY_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
+ESEARCH_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
 
 
-def query_clinvar(chrom, position, change):
+# ----------------- Functions -----------------
+def search_clinvar(hgvs: str) -> list:
     """
-    Query ClinVar using the chromosome, position, and change.
+    Search ClinVar for a given HGVS variant and return ClinVar IDs (RCV IDs).
 
-    Args:
-        chrom (str): Chromosome number (e.g., '7')
-        position (int): Genomic position (e.g., 140453136)
-        change (str): Variant change (e.g., 'C>T')
+    Parameters
+    ----------
+    hgvs : str
+        HGVS string representing the genomic variant.
 
-    Returns:
-        dict: ClinVar variant summary information (if found), otherwise None
+    Returns
+    -------
+    list
+        A list of ClinVar RCV IDs matching the HGVS variant.
+        Returns an empty list if no IDs are found or an error occurs.
     """
-    # Build search term (ClinVar supports chr:posChange, e.g., "7:140453136C>T")
-    search_term = f"{chrom}:{position}{change}"
-
-    # ESearch endpoint to find ClinVar IDs
-    esearch_url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
-    esearch_params = {
-        "db": "clinvar",
-        "term": search_term,
-        "retmode": "json"
-    }
-
-    print(f"🔍 Searching ClinVar for: {search_term}")
-    response = requests.get(esearch_url, params=esearch_params)
-    response.raise_for_status()
-    data = response.json()
-
-    # Retrieve the first ClinVar ID
-    id_list = data.get("esearchresult", {}).get("idlist", [])
-    if not id_list:
-        print("❌ No variant found in ClinVar for that query.")
-        return None
-
-    clinvar_id = id_list[0]
-    print(f"✅ Found ClinVar ID: {clinvar_id}")
-
-    # Use ESummary to retrieve detailed variant info
-    esummary_url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
-    esummary_params = {
-        "db": "clinvar",
-        "id": clinvar_id,
-        "retmode": "json"
-    }
-
-    summary_response = requests.get(esummary_url, params=esummary_params)
-    summary_response.raise_for_status()
-    summary_data = summary_response.json()
-
-    # Extract main result
-    result = summary_data.get("result", {}).get(clinvar_id, {})
-    return result
+    params = {"db": "clinvar", "term": hgvs, "retmode": "json"}
+    try:
+        response = requests.get(ESEARCH_URL, params=params)
+        response.raise_for_status()
+        data = response.json()
+        # Extract list of ClinVar IDs from the JSON response
+        return data.get("esearchresult", {}).get("idlist", [])
+    except Exception as e:
+        logger.error(f"Error searching ClinVar for {hgvs}: {e}")
+        return []
 
 
-def extract_star_rating(review_status: str) -> str:
+def get_esummary(clinvar_ids: list) -> dict:
     """
-    Convert ClinVar review status into star rating.
-    Reference: https://www.ncbi.nlm.nih.gov/clinvar/docs/review_status/
+    Fetch ClinVar esummary information for a list of ClinVar IDs.
 
-    Returns:
-        str: Human-readable star rating (e.g., "★★★ (reviewed by expert panel)")
+    Parameters
+    ----------
+    clinvar_ids : list
+        List of ClinVar RCV IDs to fetch summaries for.
+
+    Returns
+    -------
+    dict
+        JSON dictionary containing the ClinVar esummary results.
+        Returns an empty dictionary if no IDs are provided or an error occurs.
     """
-    if not review_status:
-        return "No review status available"
+    if not clinvar_ids:
+        return {}
 
-    stars_map = {
-        "practice guideline": "★★★★",
-        "reviewed by expert panel": "★★★",
-        "criteria provided, multiple submitters, no conflicts": "★★",
-        "criteria provided, single submitter": "★",
-        "no assertion criteria provided": "☆"
-    }
-
-    # Find a match in the map (case-insensitive)
-    for key, stars in stars_map.items():
-        if key.lower() in review_status.lower():
-            return f"{stars} ({review_status})"
-
-    return review_status
+    params = {"db": "clinvar", "id": ",".join(clinvar_ids), "retmode": "json"}
+    try:
+        response = requests.get(ESUMMARY_URL, params=params)
+        response.raise_for_status()
+        return response.json().get("result", {})
+    except Exception as e:
+        logger.error(f"Error getting esummary for IDs {clinvar_ids}: {e}")
+        return {}
 
 
-def main():
-    parser = argparse.ArgumentParser(description="Query ClinVar for a variant by chromosome, position, and change.")
-    parser.add_argument("--chrom", required=True, help="Chromosome number (e.g. '7')")
-    parser.add_argument("--position", required=True, type=int, help="Genomic position (e.g. 140453136)")
-    parser.add_argument("--change", required=True, help="Nucleotide change (e.g. 'C>T')")
-    args = parser.parse_args()
+# ----------------- Main Processing -----------------
+# Define input and output directories
+input_dir = "vv_search_output_files"
+output_dir = "clinvar_results"
+os.makedirs(output_dir, exist_ok=True)
 
-    result = query_clinvar(args.chrom, args.position, args.change)
+# List all JSON files in the input directory
+json_files = list(Path(input_dir).glob("*.json"))
+if not json_files:
+    logger.warning(f"No JSON files found in directory {input_dir}")
 
-    if result:
-        print("\n=== ClinVar Variant Information ===")
-        print(f"Title: {result.get('title')}")
-        print(f"Clinical significance: {result.get('clinical_significance', {}).get('description')}")
-        print(f"Variation ID: {result.get('uid')}")
-        print(f"Gene(s): {', '.join([g['symbol'] for g in result.get('gene', [])]) if result.get('gene') else 'N/A'}")
-        print(f"Last updated: {result.get('updated')}")
+# Iterate over each JSON file
+for input_file in json_files:
+    logger.info(f"Processing file: {input_file.name}")
 
-        # Star rating (from review_status)
-        review_status = result.get("review_status")
-        print(f"Review status: {extract_star_rating(review_status)}")
+    # Load variant data from JSON file
+    try:
+        with open(input_file) as f:
+            variants_data = json.load(f)
+    except Exception as e:
+        logger.error(f"Failed to load JSON file {input_file}: {e}")
+        continue
 
-        # MANE transcripts (if available)
-        mane_info = result.get("mane")
-        if mane_info:
-            mane_transcripts = []
-            for item in mane_info:
-                if "nucleotide_accession" in item:
-                    transcript = f"{item['nucleotide_accession']} ({item.get('nucleotide_version', '')})"
-                    mane_transcripts.append(transcript)
-            if mane_transcripts:
-                print(f"MANE transcripts: {', '.join(mane_transcripts)}")
-            else:
-                print("MANE transcripts: None found")
-        else:
-            print("MANE transcripts: None found")
+    results = []
 
-    else:
-        print("No variant data retrieved.")
+    # Iterate over each variant entry in the JSON file
+    for entry in variants_data:
+        variant_str = entry.get("variant")
+        if not variant_str:
+            logger.warning("Variant entry missing 'variant' field, skipping.")
+            continue
 
+        # Extract the g_hgvs notation from the nested structure
+        try:
+            variant_result = entry["result"][variant_str][variant_str]
+            g_hgvs = variant_result.get("g_hgvs")
+        except KeyError:
+            g_hgvs = None
 
-if __name__ == "__main__":
-    main()
+        if not g_hgvs:
+            logger.warning(f"No g_hgvs found for {variant_str}, skipping.")
+            continue
 
+        # Search ClinVar using HGVS notation
+        logger.info(f"Searching ClinVar for HGVS: {g_hgvs}")
+        clinvar_ids = search_clinvar(g_hgvs)
+        summary = get_esummary(clinvar_ids)
+
+        # Append results to the output list
+        results.append({
+            "variant": variant_str,
+            "g_hgvs": g_hgvs,
+            "clinvar_ids": clinvar_ids,
+            "esummary": summary
+        })
+
+        # Respect NCBI API guidelines by adding a small delay
+        time.sleep(0.3)
+
+    # Save results to output directory with the same filename
+    output_file = Path(output_dir) / input_file.name
+    try:
+        with open(output_file, "w") as f:
+            json.dump(results, f, indent=2)
+        logger.info(f"Results saved to {output_file}")
+    except Exception as e:
+        logger.error(f"Failed to save results for {input_file.name}: {e}")
+
+logger.info("All files processed successfully.")

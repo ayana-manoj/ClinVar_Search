@@ -1,3 +1,4 @@
+
 from clinvar_query.logger import logger
 from pathlib import Path
 import csv

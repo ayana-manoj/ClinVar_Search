@@ -11,10 +11,10 @@ clinvar_query/__pycache__
 clinvar_query/modules/__pycache__
 Clinvar_Search_Output_Files
 Clinvar_Search.egg-info
-clinvar_query/ClinVar_Site/Clinvar_Database_folder
-clinvar_query/ClinVar_Site/Clinvar_Error_Outputs
-clinvar_query/ClinVar_Site/clinvar_Search_Outputs
-clinvar_query/ClinVar_Site/Clinvar_Uploads
+clinvar_query/ClinVar_Site/database_folder
+clinvar_query/ClinVar_Site/error_folder
+clinvar_query/ClinVar_Site/processed_folder
+clinvar_query/ClinVar_Site/upload_folder
 .pytest_cache
 
 

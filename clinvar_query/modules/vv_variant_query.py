@@ -22,7 +22,6 @@ import json
 import requests
 from clinvar_query.logger import logger
 
-
 # ----------------- Configuration -----------------
 input_file_pattern = "Clinvar_Search_Output_Files/*.txt"
 output_folder = "vv_search_output_files"

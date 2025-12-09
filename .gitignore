@@ -16,6 +16,10 @@ clinvar_query/ClinVar_Site/error_folder
 clinvar_query/ClinVar_Site/processed_folder
 clinvar_query/ClinVar_Site/upload_folder
 .pytest_cache
+clinvar_query/ClinVar_Site/routes/__pycache__
+clinvar_query/utils/__pycache__
+clinvar_query/ClinVar_Site/__pycache__
+clinvar_query/instance
 
 
 

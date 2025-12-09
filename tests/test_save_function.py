@@ -11,7 +11,7 @@ now has been separated and will be tested
 
 """
 processed_folder = "tests/test_files/test_processed"
-data = "tests/test_files/Patient1.vcf"
+data = "tests/test_files/Patient1.csv"
 saved_file = None
 misaligned_file = None
 title = "test_data"

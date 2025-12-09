@@ -61,7 +61,7 @@
         <div class="card-body">
           <h4 class="card-title text-primary"> Upload Files <i class="bi bi-save"></i> </h4>
           <p class="card-text text-muted">Upload and process your VCF and CSV files easily using our drag and drop menu!</p>
-          <a href="{{ url_for('upload_site') }}" class="btn btn-primary">Go to Upload</a>
+          <a href="{{ url_for('main.upload_site') }}" class="btn btn-primary">Go to Upload</a>
         </div>
       </div>
     </div>
@@ -72,7 +72,7 @@
         <div class="card-body">
           <h4 class="card-title text-success">Search Data <i class ="bi bi-database"></i></h4>
           <p class="card-text text-muted">Search through your uploaded files and explore their contents quickly.</p>
-          <a href="{{ url_for('search_site') }}" class="btn btn-success">Go to Search</a>
+          <a href="{{ url_for('search.search_site') }}" class="btn btn-success">Go to Search</a>
         </div>
       </div>
     </div>
@@ -83,7 +83,7 @@
         <div class="card-body">
           <h4 class="card-title text-warning">View Results of processing <i class ="bi bi-search"></i></h4>
           <p class="card-text text-muted">See processed outputs.</p>
-          <a href="{{ url_for('patient_lookup') }}" class="btn btn-warning">View Results</a>
+          <a href="{{ url_for('lookup.result') }}" class="btn btn-warning">View Results</a>
         </div>
       </div>
     </div>

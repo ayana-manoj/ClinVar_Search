@@ -1,9 +1,6 @@
-import sqlite3
-
 from clinvar_query.utils.paths import database_file
 from flask import Blueprint, render_template, request
-from clinvar_query.modules.latest_results import search_results
-from clinvar_query.logger import create_logger
+from clinvar_query.modules.search_results import search_results
 
 
 search_bp = Blueprint("search", __name__)

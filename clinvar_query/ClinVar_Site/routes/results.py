@@ -2,7 +2,7 @@
 from clinvar_query.utils.paths import processed_folder, error_folder
 from flask import Blueprint, render_template
 from clinvar_query.modules.patient_lookup import lookup
-from clinvar_query.modules.process_misalign import read_file
+from clinvar_query.modules.read_uploads import read_file
 
 lookup_bp = Blueprint("lookup", __name__)
 

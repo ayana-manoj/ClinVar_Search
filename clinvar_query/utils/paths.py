@@ -1,0 +1,26 @@
+from pathlib import Path
+
+current_directory = str(Path(__file__).resolve().parent)
+base_directory = Path(current_directory).parent
+
+upload_folder = base_directory / "instance/upload_folder"
+processed_folder = base_directory / "instance/processed_folder"
+error_folder = base_directory / "instance/error_folder"
+database_folder = base_directory / "instance/database_folder"
+
+validator_folder = base_directory / "instance/vv_search"
+
+clinvar_folder = base_directory / "instance/clinvar_folder"
+
+database_file = database_folder / "clinvar_project.db"
+
+
+def allowed_file(filename, allowed_ext):
+
+    return '.' in filename and filename.rsplit('.',
+                                               1)[1].lower() in allowed_ext
+
+
+allowed_ext = {"vcf", "csv"}
+
+

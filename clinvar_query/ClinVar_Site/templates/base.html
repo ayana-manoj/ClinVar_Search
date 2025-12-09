@@ -15,7 +15,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{{ url_for('index') }}">Clinvar Search  <i class="bi bi-search"></i> </a>
+    <a class="navbar-brand" href="{{ url_for('main.index') }}">Clinvar Search  <i class="bi bi-search"></i> </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -23,13 +23,13 @@
 
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('upload_site') }}">Upload</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('search_site') }}">Search</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('patient_lookup') }}">Results</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.upload_site') }}">Upload</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('search.search_site') }}">Search</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('lookup.result') }}">Results</a></li>
       </ul>
 
       <!-- Search form in navbar, still a work in progress, will hopefully involve query database -->
-      <form class="d-flex" method="GET" action="{{ url_for('search_site') }}">
+      <form class="d-flex" method="GET" action="{{ url_for('search.search_site') }}">
         <input class="form-control me-2" type="search" name="q" placeholder="Search..." aria-label="Search">
         <button class="btn btn-light" type="submit">Search</button>
       </form>

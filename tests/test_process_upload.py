@@ -82,14 +82,13 @@ def test_process_misaligned_created(tmp_path):
 
         assert expected == result
 
-#this test is slightly different, we know that app_file_check won't allow the file
-#to be put in due to the extension not being allowed, which will make processed_data 
-#in the precending functions empty, this leads to a UnboundLocalError as processed_data is None
+# this test is slightly different, we know that app_file_check won't allow the file
+# to be put in due to the extension not being allowed, which will make processed_data 
+# in the precending functions empty, this leads to a UnboundLocalError as processed_data is None
 
 def test_invalid_file():
     with open(p1text, "rb") as f:
         storedfile = FileStorage(stream=f, filename="Patient1.txt")
-        expected = {'redirect_endpoint': 'process.error_site', 'message_params': {'message': 'unsupported_file', 'file': 'Patient1.txt'}}
         with pytest.raises(UnboundLocalError):
-            result  = process_upload_file(storedfile, folder, processed_folder=process_folder, error_folder=err_folder, overwrite=overwrite)
+            process_upload_file(storedfile, folder, processed_folder=process_folder, error_folder=err_folder, overwrite=overwrite)
 

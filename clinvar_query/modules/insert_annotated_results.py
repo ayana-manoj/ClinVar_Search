@@ -15,13 +15,14 @@ def insert_annotated_result(data):
 
     data: dict with keys:
         - test_id
-        - variant_id
+        - variant_id (HGVS)
         - chromosome
         - gene
         - classification
         - star_rating
         - allele_frequency
         - date_annotated
+        - associated_conditions
     """
     con = sqlite3.connect(database_file)
     cursor = con.cursor()
@@ -29,17 +30,18 @@ def insert_annotated_result(data):
     cursor.execute("""
     INSERT OR REPLACE INTO annotated_results
     (test_id, variant_id, chromosome, gene, classification, star_rating,
-                    allele_frequency, date_annotated)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+     allele_frequency, date_annotated, associated_conditions)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (
         data['test_id'],
         data['variant_id'],
-        data['chromosome'],
-        data['gene'],
-        data['classification'],
-        data['star_rating'],
-        data['allele_frequency'],
-        data['date_annotated']
+        data.get('chromosome'),
+        data.get('gene'),
+        data.get('classification'),
+        data.get('star_rating'),
+        data.get('allele_frequency'),
+        data.get('date_annotated'),
+        data.get('associated_conditions')
     ))
 
     con.commit()
@@ -52,23 +54,25 @@ def main(database_file):
     example_results = [
         {
             'test_id': 'TEST001',
-            'variant_id': 'VAR001',
+            'variant_id': 'NC_000007.14:g.55181320G>A',
             'chromosome': 7,
             'gene': 'EGFR',
             'classification': 'Pathogenic',
             'star_rating': '★★★',
             'allele_frequency': 0.02,
-            'date_annotated': '2024-05-12'
+            'date_annotated': '2024-05-12',
+            'associated_conditions': 'Lung adenocarcinoma'
         },
         {
             'test_id': 'TEST002',
-            'variant_id': 'VAR002',
+            'variant_id': 'NC_000017.11:g.7579472C>T',
             'chromosome': 17,
             'gene': 'TP53',
             'classification': 'Likely pathogenic',
             'star_rating': '★★',
             'allele_frequency': 0.01,
-            'date_annotated': '2024-05-13'
+            'date_annotated': '2024-05-13',
+            'associated_conditions': 'Li-Fraumeni syndrome'
         }
     ]
 

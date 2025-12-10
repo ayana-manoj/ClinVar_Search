@@ -1,13 +1,23 @@
 from flask import Blueprint, render_template, redirect, request, url_for, current_app
 from clinvar_query.utils.messages import message_output
-from clinvar_query.utils.paths import allowed_file, allowed_ext
+from clinvar_query.utils.paths import allowed_file, allowed_ext, validator_folder, clinvar_folder
 from clinvar_query.modules.process_uploads import process_upload_file
-from clinvar_query.modules import vv_variant_query
-from clinvar_query.modules import clinvar_api_query
-from clinvar_query.modules import json_to_db
+from clinvar_query.modules.vv_variant_query import vv_variant_query
+from clinvar_query.modules.clinvar_api_query import process_clinvar
+from clinvar_query.modules.json_to_db import json_to_dir
+import threading
 
 
 process_bp = Blueprint("process", __name__)
+
+one_task = threading.Lock()
+
+
+def run_pipeline():
+    with one_task:
+        vv_variant_query()
+        process_clinvar(validator_folder, clinvar_folder)
+        json_to_dir()
 
 
 @process_bp.route("/upload", methods=["GET", "POST"])
@@ -58,7 +68,13 @@ def upload_success():
     kwargs = request.args.to_dict()
     kwargs.pop("key", None)
     message = message_output(key, **kwargs)
-    return render_template("upload_success.html", message=message)
+    resp =  render_template("upload_success.html", message=message)
+
+    thread = threading.Thread(target=run_pipeline)
+    thread.daemon = True
+    thread.start()
+
+    return resp
 
 
 @process_bp.route("/error_page")

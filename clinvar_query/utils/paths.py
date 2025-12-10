@@ -8,7 +8,7 @@ processed_folder = base_directory / "instance/processed_folder"
 error_folder = base_directory / "instance/error_folder"
 database_folder = base_directory / "instance/database_folder"
 
-validator_folder = base_directory / "instance/vv_search"
+validator_folder = base_directory / "instance/validator_folder"
 
 clinvar_folder = base_directory / "instance/clinvar_folder"
 

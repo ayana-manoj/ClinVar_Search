@@ -1,6 +1,9 @@
 from werkzeug.utils import secure_filename
 from clinvar_query.modules.check_file_status import app_file_check
 from clinvar_query.logger import logger
+from clinvar_query.modules import vv_variant_query
+from clinvar_query.modules import clinvar_api_query
+from clinvar_query.modules import json_to_db
 import os
 
 
@@ -42,10 +45,13 @@ def process_upload_file(file, folder, processed_folder, error_folder,  overwrite
         if status == "created":
 
             logger.warning(f"{filename} file was processed, but is misaligned")
-
+            vv_variant_query()
+            clinvar_api_query()
+            json_to_db()
             return {"redirect_endpoint": "process.upload_success",
                     "message_params": {"message": "misaligned_created",
                                          "file": file.filename}}
+        
         elif status == "overwritten":
             logger.warning(f"{filename} was misaligned and overwritten")
             return {"redirect_endpoint": "process.upload_success",
@@ -54,11 +60,19 @@ def process_upload_file(file, folder, processed_folder, error_folder,  overwrite
 
     if processed_file and not misaligned_file:
         if status == "created":
+            vv_variant_query()
+            clinvar_api_query()
+            json_to_db()
             return {"redirect_endpoint": "process.upload_success",
                     "message_params": {"message": "upload_success",
                                          "file": file.filename}}
+
         elif status == "overwritten":
             logger.warning(f"{filename} Has been overwritten successfully")
+            vv_variant_query()
+            clinvar_api_query()
+            json_to_db()
             return {"redirect_endpoint": "process.upload_success",
                     "message_params": {"message": "overwritten_success",
                                          "file": file.filename}}
+            

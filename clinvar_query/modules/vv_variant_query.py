@@ -21,11 +21,12 @@ import glob
 import json
 import requests
 from clinvar_query.logger import logger
+from clinvar_query.utils.paths import processed_folder, validator_folder
 
 
 # ----------------- Configuration -----------------
-input_file_pattern = "Clinvar_Search_Output_Files/*.txt"
-output_folder = "vv_search_output_files"
+input_file_pattern = str(processed_folder/"*.txt")
+output_folder = validator_folder
 
 base_url = "https://rest.variantvalidator.org/VariantFormatter/variantformatter"
 build = "GRCh38"
@@ -118,5 +119,3 @@ if __name__ == "__main__":
     logger.info("Starting VariantValidator batch query script.")
     vv_variant_query()
     logger.info("VariantValidator batch query script finished.")
-
-

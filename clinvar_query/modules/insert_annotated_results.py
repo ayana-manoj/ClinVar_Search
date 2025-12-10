@@ -1,5 +1,4 @@
-
-from clinvar_query.modules.paths import database_file
+from clinvar_query.utils.paths import database_file
 """
 insert_annotated_results.py
 ---------------------------

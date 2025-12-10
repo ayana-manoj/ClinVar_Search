@@ -1,5 +1,5 @@
 import sqlite3
-from clinvar_query.modules.paths import database_file
+from clinvar_query.utils.paths import database_file
 
 
 def create_database(path):

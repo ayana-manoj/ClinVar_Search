@@ -2,6 +2,9 @@ from flask import Blueprint, render_template, redirect, request, url_for, curren
 from clinvar_query.utils.messages import message_output
 from clinvar_query.utils.paths import allowed_file, allowed_ext
 from clinvar_query.modules.process_uploads import process_upload_file
+from clinvar_query.modules import vv_variant_query
+from clinvar_query.modules import clinvar_api_query
+from clinvar_query.modules import json_to_db
 
 
 process_bp = Blueprint("process", __name__)

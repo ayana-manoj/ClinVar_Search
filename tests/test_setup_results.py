@@ -7,7 +7,7 @@ import sys
 # Ensure the project root is in sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from ClinVar_Search.modules.setup_results import create_database
+from clinvar_query.modules.setup_results import create_database
 
 class TestCreateDatabase(unittest.TestCase):
     

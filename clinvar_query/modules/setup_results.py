@@ -28,27 +28,32 @@ def create_database(path):
 
     CREATE TABLE IF NOT EXISTS ClinVar (
         variant_id TEXT PRIMARY KEY,
-        consensus_classification TEXT
+        consensus_classification TEXT,
+        HGVS TEXT,
+        associated_conditions TEXT
     );
 
     CREATE TABLE IF NOT EXISTS variant_info (
         variant_id TEXT PRIMARY KEY,
-        chromosome INTEGER,
+        chromosome TEXT,
         gene TEXT
     );
 
     CREATE TABLE IF NOT EXISTS annotated_results (
         test_id TEXT PRIMARY KEY,
         variant_id TEXT,
-        chromosome INTEGER,
+        HGVS TEXT,
+        chromosome TEXT,
         gene TEXT,
         classification TEXT,
         star_rating TEXT,
         allele_frequency REAL,
         date_annotated TEXT,
+        associated_conditions TEXT,
         FOREIGN KEY (variant_id) REFERENCES variant_info(variant_id)
     );
     """
+
 
     try:
         with sqlite3.connect(database_file) as con:

@@ -21,6 +21,7 @@ def json_to_dir():
             with open(json_file, "r") as f:
                 variants_data = json.load(f)
                 p_id = Path(json_file).stem
+                patient_id = p_id.split("_")[0]
         except Exception as e:
             print(f"❌ Failed to load {json_file}: {e}")
             continue
@@ -44,7 +45,7 @@ def json_to_dir():
             associated_conditions = summary.get(g_hgvs, {}).get("conditions")
 
             data_to_insert = {
-                "test_id": p_id,
+                "test_id": patient_id,
                 "variant" : variant_str,
                 "variant_id": g_hgvs,
                 "chromosome": chromosome,

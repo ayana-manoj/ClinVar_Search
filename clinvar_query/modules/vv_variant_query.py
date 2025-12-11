@@ -22,11 +22,14 @@ import json
 import requests
 from clinvar_query.logger import logger
 from clinvar_query.utils.paths import processed_folder, validator_folder
+from pathlib import Path
 
 
 # ----------------- Configuration -----------------
 input_file_pattern = str(processed_folder/"*.txt")
 output_folder = validator_folder
+
+output_file_pattern = str(output_folder/"*.json")
 
 base_url = "https://rest.variantvalidator.org/VariantFormatter/variantformatter"
 build = "GRCh38"
@@ -60,14 +63,19 @@ def vv_variant_query():
     if not files:
         logger.warning(f"No input files found matching pattern: {input_file_pattern}")
         return
+   # Locate output files
+    output_files = glob.glob(output_file_pattern)
+    output_basenames = {Path(f).stem for f in output_files}
 
-    logger.info(f"Found {len(files)} input file(s) to process.")
 
     # Process each input file
     for file in files:
         input_filename = os.path.basename(file)
+        input_stem = Path(input_filename).stem
         logger.info(f"Processing file: {input_filename}")
-
+        if input_stem in output_basenames:
+            logger.warning(f"skipping already processed file: {input_filename}")
+            continue
         # Read variants from file
         try:
             with open(file, "r") as f:

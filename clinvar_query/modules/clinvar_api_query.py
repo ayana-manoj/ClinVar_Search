@@ -80,9 +80,16 @@ def process_clinvar(input_dir, output_dir):
     json_files = list(Path(input_dir).glob("*.json"))
     if not json_files:
         logger.warning(f"No JSON files found in directory {input_dir}")
+    # look at all output files 
+    output_files = list(Path(output_dir).glob("*json"))
+    output_basenames = {f.stem for f in output_files}
+    
 
     # Iterate over each JSON file
     for input_file in json_files:
+        if input_file.stem in output_basenames:
+            logger.warning(f"skipping already processed file: {input_file.name}")
+            continue
         logger.info(f"Processing file: {input_file.name}")
 
         # Load variant data from JSON file

@@ -1,4 +1,8 @@
 """
+
+*********** CREATED USING CHATGPT ***********
+
+
 VariantValidator Batch Query Script
 -----------------------------------
 

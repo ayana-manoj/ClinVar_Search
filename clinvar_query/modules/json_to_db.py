@@ -29,23 +29,63 @@ def json_to_dir():
         for entry in variants_data:
             variant_str = entry.get("variant")
             g_hgvs = entry.get("g_hgvs")
-            clinvar_ids = entry.get("clinvar_ids", [])
             summary = entry.get("esummary", {})
 
-            if not variant_str or not g_hgvs:
-                print(f"⚠️ Skipping entry, missing variant or g_hgvs: {entry}")
+            if not variant_str or not g_hgvs or not summary:
+                print(f"⚠️ Skipping malformed entry: {entry}")
                 continue
 
-            # Extract key fields from esummary if available
-            chromosome = summary.get(g_hgvs, {}).get("chromosome")
-            gene = summary.get(g_hgvs, {}).get("gene_symbol")
-            classification = summary.get(g_hgvs, {}).get("germline_classification")
-            star_rating = summary.get(g_hgvs, {}).get("review_status")
-            allele_frequency = summary.get(g_hgvs, {}).get("value")
-            associated_conditions = summary.get(g_hgvs, {}).get("trait_name")
+#amended extraction of clinvar JSON files
 
+            # --- Resolve ClinVar record ---
+            uids = summary.get("uids", [])
+            if not uids:
+                print(f"⚠️ No ClinVar UID found for variant {variant_str}")
+                continue
+
+            cv_id = uids[0]
+            cv_data = summary.get(cv_id, {})
+
+            # --- Gene symbol ---
+            gene = None
+            genes = cv_data.get("genes", [])
+            if genes:
+                gene = genes[0].get("symbol")
+
+            # --- Chromosome (current assembly) ---
+            chromosome = None
+            variation_set = cv_data.get("variation_set", [])
+            if variation_set:
+                locs = variation_set[0].get("variation_loc", [])
+                for loc in locs:
+                    if loc.get("status") == "current":
+                        chromosome = loc.get("chr")
+                        break
+
+            # --- Germline classification & review status ---
+            germline = cv_data.get("germline_classification", {})
+            classification = germline.get("description")
+            star_rating = germline.get("review_status")
+
+            # --- Associated conditions ---
+            conditions = []
+            for trait in germline.get("trait_set", []):
+                name = trait.get("trait_name")
+                if name:
+                    conditions.append(name)
+
+            associated_conditions = "; ".join(conditions) if conditions else None
+
+            # --- Allele frequency ---
+            allele_frequency = None
+            if variation_set:
+                freq_set = variation_set[0].get("allele_freq_set", [])
+                if freq_set:
+                    allele_frequency = freq_set[0].get("value")
+
+            # --- Prepare DB payloads ---
             clinvar = {
-                "variant_id" : variant_str,
+                "variant_id": variant_str,
                 "consensus_classification": classification,
                 "hgvs": g_hgvs,
                 "associated_conditions": associated_conditions,
@@ -54,19 +94,21 @@ def json_to_dir():
                 "allele_frequency": allele_frequency,
                 "chromosome": chromosome
             }
+
             patient_info = {
-                "patient_id" : patient_id,
-                "id_test_type" : p_id
+                "patient_id": patient_id,
+                "id_test_type": p_id
             }
+
             variants = {
-                "variant_id" : variant_str,
+                "variant_id": variant_str,
                 "id_test_type": p_id,
-                "patient_variant": p_id + variant_str,
+                "patient_variant": f"{p_id}_{variant_str}"
             }
+
             insert_patient_information(patient_info)
             insert_variants(variants)
             insert_clinvar(clinvar)
-
 
     print("✅ All ClinVar JSON files processed into the database.")
 

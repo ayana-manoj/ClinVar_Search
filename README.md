@@ -1,19 +1,20 @@
 # ClinVar Search
+[![codecov](https://codecov.io/github/ayana-manoj/ClinVar_Search/graph/badge.svg?token=QWTxw5kiY4)](https://codecov.io/github/ayana-manoj/ClinVar_Search)
 
 ## About
 
 ClinVar Search is a simple to use web based application for the purpose of annotating 
-raw genomic variants with data from the [ClinVar](https://www.ncbi.nlm.nih.gov/clinvar/) public archive of human variantions.
+raw genomic variants with data from the [ClinVar](https://www.ncbi.nlm.nih.gov/clinvar/) public archive of human variations.
 
 Data extracted from ClinVar includes: related transcripts (including any MANE SELECT),
 consensus classification, conditions, star rating, and allele frequency (gnomAD).
 
 ClinVar Search utilises the function of [VariantValidator](https://variantvalidator.org/) of validating the syntax
 and parameters of DNA variant descriptions according to the [HGVS Nomenclature](https://hgvs-nomenclature.org/stable/), through its [REST API](https://rest.variantvalidator.org/), to obtain the 
-HGVS genomic identifier for a query variant and then using it to query ClinVar. This ensures that a standaradised and validated term for the query variant is used to search ClinVar.
+HGVS genomic identifier for a query variant and then using it to query ClinVar. This ensures that a standardised and validated term for the query variant is used to search ClinVar.
 [HGNC](https://www.genenames.org/about/) gene ID and gene symbol are also extracted from the VariantValidator search results to include in the annotation.  
 
-ClinVar Search is accessd by [installing locally](https://github.com/ayana-manoj/ClinVar_Search/tree/develop/docs).
+ClinVar Search is accessed by [installing locally](https://github.com/ayana-manoj/ClinVar_Search/tree/develop/docs).
 
 
 ## Features
@@ -21,8 +22,8 @@ Overview of the workflow
 <img src="https://github.com/ayana-manoj/ClinVar_Search/blob/develop/docs/Overview.png" >
 
 Users can input VCF or CSV files on to the 'Upload Files' page by simply dragging and dropping a file from their file explorer into the upload field. Variants are then parsed through a module to 
-standardise thier format and saved as a text file. The variants are then validated with the module to query VariantValidator to return the associated HGVS nomenclature, which is stored in the project
-as a JSON file. The HGVS g. identifier is extracted from these files and used to query the ClinVar archive to obtain the esummary for each query, which is also returned as a JSON file and stored in the project. The extracted data (mentioned above) is displayed in a simple table which can be accssed by clicking on the 'View Results' tab.
+standardise their format and saved as a text file. The variants are then validated with the module to query VariantValidator to return the associated HGVS nomenclature, which is stored in the project
+as a JSON file. The HGVS g. identifier is extracted from these files and used to query the ClinVar archive to obtain the esummary for each query, which is also returned as a JSON file and stored in the project. The extracted data (mentioned above) is displayed in a simple table which can be accessed by clicking on the 'View Results' tab.
 
 
 The annotated data obtained for a variant is stored within a local database. This allows the user to easily access this information by either using the patient ID or a gene ID - the latter will be verified against all HGNC IDs obtained from previous queries.

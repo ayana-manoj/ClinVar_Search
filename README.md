@@ -34,8 +34,7 @@ The annotated data obtained for a variant is stored within a local database. Thi
 Please see [LICENSE.txt](LICENSE.txt)
 
 > <LICENSE>
-> Copyright (C) 2016-2025 VariantValidator Contributors
->
+  
 > This program is free software: you can redistribute it and/or modify
 > it under the terms of the GNU Affero General Public License as
 > published by the Free Software Foundation, either version 3 of the
@@ -56,12 +55,7 @@ Please see [LICENSE.txt](LICENSE.txt)
 ClinVar Search will work locally on Mac OS X or Linux-compatible computers. It can also work within a [docker container](docs/DOCKER.md). For installation guidance, see Installation Manuals below.
 
 **Required software:**
-* MySQL version 5.7 or above
-* Python 3.12.8 or above
-* SQLite version 3.8.0 or above
-
-**Optional software:**
-* Postgres version 9.5 or above.
+* Python 3.12.8
 
 ## Installation Manuals
 For installation instructions please see [INSTALLATION.md](docs/INSTALLATION.md).

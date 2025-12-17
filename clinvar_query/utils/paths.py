@@ -14,6 +14,8 @@ clinvar_folder = base_directory / "instance/clinvar_folder"
 
 database_file = database_folder / "clinvar_project.db"
 
+logs_folder = base_directory / "instance/logs_folder"
+
 
 def allowed_file(filename, allowed_ext):
 

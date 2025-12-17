@@ -1,5 +1,5 @@
 
-from clinvar_query.logger import logger
+from clinvar_query.utils.logger import logger
 from pathlib import Path
 import csv
 
@@ -45,7 +45,7 @@ Example output
                 else:
                     misaligned_row = f"incomplete or misaligned row {row}"
                     misaligned_rows.append(misaligned_row)
-                    logger.error = (f"incomplete or misaligned row {row}")
+                    logger.error(f"incomplete or misaligned row {row}")
 
             parse_string = "\n".join(variants)
             if misaligned_rows:

@@ -1,6 +1,6 @@
 from werkzeug.utils import secure_filename
 from clinvar_query.modules.check_file_status import app_file_check
-from clinvar_query.logger import logger
+from clinvar_query.utils.logger import logger
 import os
 
 

@@ -3,7 +3,7 @@ import requests
 import time
 import os
 from pathlib import Path
-from clinvar_query.logger import logger
+from clinvar_query.utils.logger import logger
 from clinvar_query.utils.paths import validator_folder, clinvar_folder
 
 # ----------------- NCBI E-utilities URLs -----------------

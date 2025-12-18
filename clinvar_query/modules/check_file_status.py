@@ -1,6 +1,6 @@
 from pathlib import Path
 from clinvar_query.modules.parser import parser
-from clinvar_query.logger import logger
+from clinvar_query.utils.logger import logger
 from clinvar_query.modules.save_function import save_output_to_file
 
 

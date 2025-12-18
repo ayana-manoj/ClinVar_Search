@@ -1,6 +1,6 @@
 import os
 from flask import request
-from clinvar_query.logger import logger
+from clinvar_query.utils.logger import logger
 
 
 def read_file(folder, filetype):
@@ -15,5 +15,5 @@ def read_file(folder, filetype):
         with open(file_path, "r", encoding="utf-8") as f:
             content = f.read()
     except Exception as e:
-        logger.error("Reading processed or misalgined files has failed : {}".format(e))
+        logger.error("Reading processed or misaligned files has failed : {}".format(e))
     return content

@@ -1,5 +1,5 @@
 from clinvar_query.modules.setup_results import create_database
-from clinvar_query.logger import logger
+from clinvar_query.utils.logger import logger
 import os
 
 
@@ -12,6 +12,7 @@ def database_initialise(db_file):
         else:
             create_database(db_file)
             return db_file
+     
     except Exception as e:
         logger.critical("Database searching or creating has failed! "
                         "The app will not have most functionality: {}" .format(e))

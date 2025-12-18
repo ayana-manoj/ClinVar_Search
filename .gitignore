@@ -5,7 +5,6 @@ examples
 .vscode
 tests/__pycache__
 
-tests/test_files
 
 clinvar_query/__pycache__
 clinvar_query/modules/__pycache__

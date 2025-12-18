@@ -53,8 +53,8 @@ def test_lookup_files():
                                                misaligned,
                                                database,
                                                process_folder=processed_folder,
-                                               err_folder=error_folder                                               )
-    expected_files = ['test1_processed.txt', 'test_data_processed.txt']
+                                               err_folder=error_folder)
+    expected_files = ['test_data_processed.txt', 'test5_processed.txt', 'test1_processed.txt']
 
     assert files == expected_files
 
@@ -88,7 +88,7 @@ def test_error_files():
                                                database,
                                                process_folder=processed_folder,
                                                err_folder=error_folder)
-    expected_error_files = ['misaligned_output.txt','misaligned_test5_processed.txt']
+    expected_error_files = ['misaligned_test5_processed.txt','misaligned_output.txt',]
 
     assert misaligned == expected_error_files
 

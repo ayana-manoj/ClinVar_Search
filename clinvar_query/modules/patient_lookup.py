@@ -1,18 +1,25 @@
 import sqlite3
 import os
-from clinvar_query.logger import logger
+from clinvar_query.utils.logger import logger
 from clinvar_query.utils.paths import processed_folder, error_folder
 from clinvar_query.utils.paths import database_file
 
-def lookup(latest_results, files, misaligned):
+def lookup(latest_results, files, misaligned, database):
+    database = database_file
     try:
-        con = sqlite3.connect(database_file)
+        con = sqlite3.connect(database)
         con.row_factory = sqlite3.Row
         cur = con.cursor()
 
-        cur.execute("SELECT * FROM annotated_results"
-                    " ORDER BY date_annotated DESC LIMIT 1")
-        latest_results = cur.fetchone()
+        cur.execute("""
+            SELECT * 
+            FROM variants
+            WHERE date_annotated = (
+                SELECT MAX(date_annotated)
+                FROM variants
+            )
+        """)
+        latest_results =cur.fetchall()
 
     except Exception as e:
         logger.error("database error : {}".format(e))

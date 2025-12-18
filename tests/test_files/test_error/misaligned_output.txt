@@ -1,0 +1,1 @@
+incomplete or misaligned row ['12', '40310486', 'C']

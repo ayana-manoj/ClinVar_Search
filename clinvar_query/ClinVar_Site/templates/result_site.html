@@ -51,20 +51,36 @@
       </p>
 
       <!-- Database List -->
-<h3 class="mt-4 text-primary">Latest Patient Result</h3>
+<h3 class="mt-4 text-primary">Database Results</h3>
 
-    <ul class="list-group">
-      {%if latest%}
-        {% for col in latest.keys() %}
-          <li class="list-group-item d-flex justify-content-between">
-            <strong>{{ col }}</strong>
-            <span>{{ latest[col] }}</span>
-          </li>
-        {% endfor %}
-      {%else%}
-        <li class="list-group-item text-muted"> No data found.</li>
-      {% endif %}
-        </ul>
+<table class="table table-striped table-bordered">
+  <thead class="table-primary">
+    <tr>
+      <th>variant_id</th>
+      <th>id_test_type</th>
+      <th>patient_variant</th>
+      <th>date_annotated</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% if latest %}
+      {% for item in latest %}
+        <tr>
+          <td>{{ item.variant_id }}</td>
+          <td>{{ item.id_test_type}}</td>
+          <td>{{ item.patient_variant}}</td>
+          <td>{{ item.date_annotated}}</td>
+        </tr>
+      {% endfor %}
+    {% else %}
+      <tr>
+        <td colspan="3" class="text-muted text-center">
+          No database entries yet.
+        </td>
+      </tr>
+    {% endif %}
+  </tbody>
+</table>
 
 
       <!-- Latest File List -->

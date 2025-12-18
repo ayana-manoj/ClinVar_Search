@@ -21,7 +21,7 @@ def create_logger():
 
         # working on rotating file handler
         Path(str(logs_folder)).mkdir(parents=True,
-                                                    exist_ok=True)
+                                     exist_ok=True)
         file_handler = RotatingFileHandler(str(logs_folder) +
                                            "/Clinvar_Search.log",
                                            maxBytes=500000,

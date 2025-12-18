@@ -28,9 +28,12 @@ def result():
     misaligned = []
     database = database_file
     latest_results, files, misaligned = lookup(latest_results,
-                                               files, 
+                                               files,
                                                misaligned,
-                                               database)
+                                               database,
+                                               process_folder=processed_folder,
+                                               err_folder=error_folder
+                                               )
 
     return render_template("result_site.html",
                            latest=latest_results, files=files,

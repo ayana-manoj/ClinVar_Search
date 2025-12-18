@@ -4,8 +4,9 @@ from clinvar_query.utils.logger import logger
 from clinvar_query.utils.paths import processed_folder, error_folder
 from clinvar_query.utils.paths import database_file
 
-def lookup(latest_results, files, misaligned, database):
-    database = database_file
+def lookup(latest_results, files, misaligned, database,
+           process_folder, err_folder):
+    
     try:
         con = sqlite3.connect(database)
         con.row_factory = sqlite3.Row
@@ -29,24 +30,24 @@ def lookup(latest_results, files, misaligned, database):
 
     # processed patient file lookup
     try:
-        if os.path.exists(processed_folder):
-            files = [file for file in os.listdir(processed_folder)
-                     if os.path.isfile(os.path.join(processed_folder, file))]
+        if os.path.exists(process_folder):
+            files = [file for file in os.listdir(process_folder)
+                     if os.path.isfile(os.path.join(process_folder, file))]
             files = sorted(
                 files,
                 key=lambda file: os.path.getmtime(os.path.join(
-                    processed_folder, file)),
+                    process_folder, file)),
                 reverse=True
             )
     # files with errors in them
         else:
             files = []
-        if os.path.exists(error_folder):
-            misaligned = [f for f in os.listdir(error_folder)
-                          if os.path.isfile(os.path.join(error_folder, f))]
+        if os.path.exists(err_folder):
+            misaligned = [f for f in os.listdir(err_folder)
+                          if os.path.isfile(os.path.join(err_folder, f))]
             misaligned = sorted(
                 misaligned,
-                key=lambda f: os.path.getmtime(os.path.join(error_folder, f)),
+                key=lambda f: os.path.getmtime(os.path.join(err_folder, f)),
                 reverse=True
             )
         else:

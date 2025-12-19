@@ -1,6 +1,6 @@
 """
 
-*********** CREATED USING CHATGPT ***********
+*********** CREATED USING HELP OF CHATGPT ***********
 
 ===============================================================================
 Test Suite for clinvar_api_query.py

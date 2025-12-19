@@ -1,6 +1,6 @@
 """
 
-*********** CREATED USING CHATGPT ***********
+*********** CREATED USING HELP OF CHATGPT ***********
 
 ===============================================================================
 Test Suite for vv_variant_query.py

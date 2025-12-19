@@ -43,6 +43,7 @@ pipeline {
             steps {
                 // Activate environment and install current project
                 sh '''
+                #!/bin/bash
                 source ${CONDA_PREFIX}/etc/profile.d/conda.sh
                 conda activate ${CONDA_ENV_NAME}
                 pip install .
@@ -54,6 +55,7 @@ pipeline {
             steps {
                 // Run the test suite using pytest
                 sh '''
+                #!/bin/bash
                 source ${CONDA_PREFIX}/etc/profile.d/conda.sh
                 conda activate ${CONDA_ENV_NAME}
                 pytest --cov=clinvar_query tests/

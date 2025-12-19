@@ -4,6 +4,13 @@ from clinvar_query.utils.logger import logger
 from clinvar_query.utils.paths import processed_folder, error_folder
 from clinvar_query.utils.paths import database_file
 
+"""
+This executes a sql query to output patient results in the results page
+this is fed in latest_results to output
+patient id, variant id, consensus classification, star rating, date annotated
+
+"""
+
 def lookup(latest_results, files, misaligned, database,
            process_folder, err_folder):
     

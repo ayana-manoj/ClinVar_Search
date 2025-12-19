@@ -11,7 +11,7 @@ pipeline {
         CONDA_PREFIX = '/usr/local/miniconda3'
 
         // Name of the Conda environment to create
-        CONDA_ENV_NAME = 'clinvar_Search'
+        CONDA_ENV_NAME = 'clinvar_search'
 
         // Disable pip version check and make Python output unbuffered
         PIP_DISABLE_PIP_VERSION_CHECK = '1'

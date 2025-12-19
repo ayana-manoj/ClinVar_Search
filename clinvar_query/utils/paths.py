@@ -1,7 +1,8 @@
 from pathlib import Path
+import os
 
-current_directory = str(Path(__file__).resolve().parent)
-base_directory = Path(current_directory).parent
+parent_directory = Path(os.environ.get("ClinVar_Search", Path.cwd())).resolve()
+base_directory = parent_directory/ "clinvar_query"
 
 upload_folder = base_directory / "instance/upload_folder"
 processed_folder = base_directory / "instance/processed_folder"

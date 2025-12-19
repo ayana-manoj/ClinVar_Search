@@ -22,7 +22,7 @@ for table in tables:
     if not columns:
         continue
 
-    # Check if your mutable column exists
+    # Check if the hgnc id is tied to gene. If it exists
     if "gene" in columns and "hgnc_id" in columns:
         search_value = get_hgnc_id(cur, table, "gene", query_data, "hgnc_id")
 

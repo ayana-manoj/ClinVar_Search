@@ -26,17 +26,16 @@ def app_file_check(file_path,  processed_folder, error_folder, overwrite=False):
     except Exception:
         logger.error("unsupported file type")
 
-    finally:
-        saved_file, status = save_output_to_file(processed_data,
-                                                 title,
-                                                 folder=processed_folder,
-                                                 overwrite=overwrite)
+    saved_file, status = save_output_to_file(processed_data,
+                                                title,
+                                                folder=processed_folder,
+                                                overwrite=overwrite)
 
-        if misaligned_data:
-            misaligned_file, status = save_output_to_file(misaligned_data,
-                                                          misaligned_title,
-                                                          folder=error_folder,
-                                                          overwrite=overwrite)
+    if misaligned_data:
+        misaligned_file, status = save_output_to_file(misaligned_data,
+                                                        misaligned_title,
+                                                        folder=error_folder,
+                                                        overwrite=overwrite)
 
-        return saved_file, misaligned_file, status
+    return saved_file, misaligned_file, status
 # route for the index/ landing page

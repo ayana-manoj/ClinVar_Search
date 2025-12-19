@@ -12,16 +12,15 @@ def create_database(path):
     PRAGMA foreign_keys = ON;
 
     CREATE TABLE IF NOT EXISTS patient_information (
-        patient_id TEXT ,
-        id_test_type TEXT PRIMARY KEY
+        patient_id TEXT PRIMARY KEY
     );
 
     CREATE TABLE IF NOT EXISTS variants (
         variant_id TEXT,
-        id_test_type TEXT,
+        patient_id TEXT,
         patient_variant TEXT PRIMARY KEY,
         date_annotated DATETIME DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (id_test_type) REFERENCES patient_information(id_test_type)
+        FOREIGN KEY (patient_id) REFERENCES patient_information(patient_id)
     );
 
     CREATE TABLE IF NOT EXISTS clinvar (

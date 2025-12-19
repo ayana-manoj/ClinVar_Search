@@ -13,12 +13,18 @@ def lookup(latest_results, files, misaligned, database,
         cur = con.cursor()
 
         cur.execute("""
-            SELECT * 
+            SELECT
+                variants.patient_id,
+                variants.variant_id,
+                clinvar.consensus_classification,
+                clinvar.star_rating,
+                clinvar.allele_frequency,
+                variants.date_annotated
             FROM variants
-            WHERE date_annotated = (
-                SELECT MAX(date_annotated)
-                FROM variants
-            )
+            LEFT JOIN clinvar
+                ON variants.variant_id = clinvar.variant_id
+            WHERE variants.date_annotated = (
+                SELECT MAX(date_annotated) FROM variants)      
         """)
         latest_results =cur.fetchall()
 

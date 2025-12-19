@@ -8,7 +8,7 @@ pipeline {
 
     environment {
         // Path to Conda installation on the Jenkins machine
-        CONDA_PREFIX = '/usr/local/miniconda3/'
+        CONDA_PREFIX = '/usr/local/miniconda3'
 
         // Name of the Conda environment to create
         CONDA_ENV_NAME = 'clinvar_Search'

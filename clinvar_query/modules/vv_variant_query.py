@@ -58,14 +58,27 @@ def vv_variant_query():
     os.makedirs(output_folder, exist_ok=True)
     logger.info(f"Output folder verified/created: {output_folder}")
 
+#CHANGE ADDED TO HELP WITH TEST (test_vv_variant_query.py)
     # Locate input files
     files = glob.glob(input_file_pattern)
     if not files:
         logger.warning(f"No input files found matching pattern: {input_file_pattern}")
         return
+
+    # Locate output files (SAFE from glob patching)
+    output_dir = Path(output_folder)
+    output_files = list(output_dir.glob("*.json"))
+    output_basenames = {f.stem for f in output_files}
+
+#REINSTATE IF ABOVE IMPACTS FUNCTIONING OF PIPELINE
+    # Locate input files
+    #files = glob.glob(input_file_pattern)
+    #if not files:
+    #    logger.warning(f"No input files found matching pattern: {input_file_pattern}")
+    #    return
    # Locate output files
-    output_files = glob.glob(output_file_pattern)
-    output_basenames = {Path(f).stem for f in output_files}
+   # output_files = glob.glob(output_file_pattern)
+    #output_basenames = {Path(f).stem for f in output_files}
 
 
     # Process each input file

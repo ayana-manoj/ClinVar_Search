@@ -1,5 +1,5 @@
 from clinvar_query.modules.save_function import save_output_to_file
-from clinvar_query.logger import logger
+from clinvar_query.utils.logger import logger
 from clinvar_query.modules.parser import parser
 from pathlib import Path
 import os
@@ -11,7 +11,7 @@ now has been separated and will be tested
 
 """
 processed_folder = "tests/test_files/test_processed"
-data = "tests/test_files/Patient1.csv"
+data = "tests/test_files/test1.csv"
 saved_file = None
 misaligned_file = None
 title = "test_data"

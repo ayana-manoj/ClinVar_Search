@@ -1,12 +1,11 @@
 import logging
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
+from clinvar_query.utils.paths import logs_folder
 
 
 def create_logger():
     # present and parent directory set up, most important
-    current_directory = str(Path(__file__).resolve().parent)
-    parent_directory = Path(current_directory).parent
     # create logger
     logger = logging.getLogger("ClinVar_Search_logger")
     logger.setLevel(logging.INFO)
@@ -21,10 +20,10 @@ def create_logger():
         stream_handler.setFormatter(stream_formatter)
 
         # working on rotating file handler
-        Path(str(parent_directory) + "/logs").mkdir(parents=True,
-                                                    exist_ok=True)
-        file_handler = RotatingFileHandler(str(parent_directory) +
-                                           "/logs/Clinvar_Search.log",
+        Path(str(logs_folder)).mkdir(parents=True,
+                                     exist_ok=True)
+        file_handler = RotatingFileHandler(str(logs_folder) +
+                                           "/Clinvar_Search.log",
                                            maxBytes=500000,
                                            backupCount=2)
         file_handler.setLevel(logging.INFO)

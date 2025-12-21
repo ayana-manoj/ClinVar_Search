@@ -1,5 +1,5 @@
 
-from clinvar_query.utils.paths import processed_folder, error_folder
+from clinvar_query.utils.paths import processed_folder, error_folder, database_file
 from flask import Blueprint, render_template
 from clinvar_query.modules.patient_lookup import lookup
 from clinvar_query.modules.read_uploads import read_file
@@ -26,8 +26,14 @@ def result():
     latest_results = []
     files = []
     misaligned = []
+    database = database_file
     latest_results, files, misaligned = lookup(latest_results,
-                                               files, misaligned)
+                                               files,
+                                               misaligned,
+                                               database,
+                                               process_folder=processed_folder,
+                                               err_folder=error_folder
+                                               )
 
     return render_template("result_site.html",
                            latest=latest_results, files=files,

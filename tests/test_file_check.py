@@ -1,12 +1,12 @@
 from clinvar_query.modules.check_file_status import app_file_check
-from clinvar_query.logger import logger
+from clinvar_query.utils.logger import logger
 from pathlib import Path
 import os
 import pytest
 
 
-process_file = "tests/test_files/Patient1.csv"
-misalign_file = "tests/test_files/Patient5.csv"
+process_file = "tests/test_files/test1.csv"
+misalign_file = "tests/test_files/test5.csv"
 process_folder = "tests/test_files/test_processed"
 err_folder = "tests/test_files/test_error"
 overwrite = False

@@ -1,5 +1,5 @@
 [project]
-name = "Clinvar_Search"
+name = "clinvar_query"
 version = "0.0.1"
 description = "Formats CSV and VCF files to annotate data using clinvar "
 license = {file = "LICENSE.txt"}
@@ -33,7 +33,7 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 where = ["."]  # Look for packages in the  root directory
-include = ["Clinvar_Search*"]
+include = ["clinvar_query*"]
 
 [build-system]
 requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2", "wheel"]

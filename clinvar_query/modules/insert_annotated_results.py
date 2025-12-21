@@ -1,82 +1,203 @@
-
-from clinvar_query.modules.paths import database_file
 """
-insert_annotated_results.py
----------------------------
-Insert annotated results into the SQLite database.
-This script inserts rows into the `annotated_results` table.
+Database insertion utilities for ClinVar query results.
+
+This module provides helper functions to insert or update:
+- Patient information
+- Variant associations
+- ClinVar annotations
+
+Logging is handled by the shared ClinVar_Search_logger, which must be
+configured elsewhere in the application.
 """
 
 import sqlite3
 
+from clinvar_query.utils.paths import database_file
+from clinvar_query.utils.logger import logger
 
-def insert_annotated_result(data):
+
+def insert_patient_information(data):
     """
-    Insert a single annotated result into the database.
+    Insert or update a patient's information into the database.
 
-    data: dict with keys:
-        - test_id
-        - variant_id
-        - chromosome
-        - gene
-        - classification
-        - star_rating
-        - allele_frequency
-        - date_annotated
+    Parameters
+    ----------
+    data : dict
+        Dictionary containing:
+        - patient_id (str): Unique patient identifier
+        - patient_id (str): Identifier for the test or assay
+
+    Notes
+    -----
+    Uses INSERT OR REPLACE to ensure idempotent behaviour and allow
+    re-processing of the same patient data.
     """
-    con = sqlite3.connect(database_file)
-    cursor = con.cursor()
+    logger.debug("Preparing to insert patient information: %s", data)
 
-    cursor.execute("""
-    INSERT OR REPLACE INTO annotated_results
-    (test_id, variant_id, chromosome, gene, classification, star_rating,
-                    allele_frequency, date_annotated)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    """, (
-        data['test_id'],
-        data['variant_id'],
-        data['chromosome'],
-        data['gene'],
-        data['classification'],
-        data['star_rating'],
-        data['allele_frequency'],
-        data['date_annotated']
-    ))
+    try:
+        # Establish a connection to the SQLite database
+        con = sqlite3.connect(database_file)
+        cursor = con.cursor()
 
-    con.commit()
-    con.close()
-    print(f"✅ Inserted/Updated result for test_id {data['test_id']}")
+        # Insert or replace patient information
+        cursor.execute(
+            """
+            INSERT OR IGNORE INTO patient_information
+            (patient_id)
+            VALUES (?)
+            """,
+            (
+                data.get("patient_id"),
+            ),
+        )
 
+        # Commit the transaction to persist changes
+        con.commit()
 
-def main(database_file):
-    # Example data to insert
-    example_results = [
-        {
-            'test_id': 'TEST001',
-            'variant_id': 'VAR001',
-            'chromosome': 7,
-            'gene': 'EGFR',
-            'classification': 'Pathogenic',
-            'star_rating': '★★★',
-            'allele_frequency': 0.02,
-            'date_annotated': '2024-05-12'
-        },
-        {
-            'test_id': 'TEST002',
-            'variant_id': 'VAR002',
-            'chromosome': 17,
-            'gene': 'TP53',
-            'classification': 'Likely pathogenic',
-            'star_rating': '★★',
-            'allele_frequency': 0.01,
-            'date_annotated': '2024-05-13'
-        }
-    ]
+        logger.info(
+            "Inserted/Updated patient information: %s",
+            data.get("patient_id"),
+        )
 
-    for result in example_results:
-        insert_annotated_result(result)
+    except sqlite3.DatabaseError:
+        # Log database errors with full traceback
+        logger.exception(
+            "Failed to insert patient information: %s", data
+        )
+        raise
+
+    finally:
+        # Always close the database connection
+        con.close()
 
 
-if __name__ == "__main__":
-    main(database_file)
-    print(database_file)
+def insert_variants(data):
+    """
+    Insert or update variant information in the database.
+
+    Parameters
+    ----------
+    data : dict
+        Dictionary containing:
+        - variant_id (str): Variant identifier
+        - patient_id (str): patient identifier
+        - patient_variant (str): Composite patient-variant key
+    """
+    logger.debug("Preparing to insert variant record: %s", data)
+
+    try:
+        con = sqlite3.connect(database_file)
+        cursor = con.cursor()
+
+        cursor.execute(
+            """
+            INSERT OR IGNORE INTO variants
+            (variant_id, patient_id, patient_variant)
+            VALUES (?, ?, ?)
+            """,
+            (
+                data.get("variant_id"),
+                data.get("patient_id"),
+                data.get("patient_variant"),
+            ),
+        )
+
+        con.commit()
+
+        logger.info(
+            "Inserted/Updated variant association: %s",
+            data.get("patient_variant"),
+        )
+
+    except sqlite3.DatabaseError:
+        logger.exception(
+            "Failed to insert variant record: %s", data
+        )
+        raise
+
+    finally:
+        con.close()
+
+
+def insert_clinvar(data):
+    """
+    Insert or update ClinVar variant information into the database.
+
+    Parameters
+    ----------
+    data : dict
+        Dictionary containing:
+        - variant_id (str)
+        - hgvs (str)
+        - associated_conditions (str or None)
+        - gene (str or None)
+        - chromosome (str or None)
+        - consensus_classification (str or None)
+        - star_rating (str)
+        - allele_frequency (float or None)
+
+    Notes
+    -----
+    Allele frequency is explicitly coerced to a float (or None)
+    to avoid SQLite type ambiguity.
+    """
+    logger.debug("Preparing to insert ClinVar record: %s", data)
+
+    # Safely coerce allele frequency to float
+    af = data.get("allele_frequency")
+    try:
+        allele_frequency = float(af) if af is not None else None
+    except (ValueError, TypeError):
+        logger.warning(
+            "Invalid allele frequency for variant %s: %s",
+            data.get("variant_id"),
+            af,
+        )
+        allele_frequency = None
+
+    try:
+        con = sqlite3.connect(database_file)
+        cursor = con.cursor()
+
+        cursor.execute(
+            """
+            INSERT OR IGNORE INTO clinvar
+            (
+                variant_id,
+                hgvs,
+                associated_conditions,
+                chromosome,
+                gene,
+                consensus_classification,
+                star_rating,
+                allele_frequency
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                data.get("variant_id"),
+                data.get("hgvs"),
+                data.get("associated_conditions"),
+                data.get("chromosome"),
+                data.get("gene"),
+                data.get("consensus_classification"),
+                data.get("star_rating"),
+                data.get("allele_frequency"),
+            ),
+        )
+
+        con.commit()
+
+        logger.info(
+            "Inserted/Updated ClinVar record: %s",
+            data.get("variant_id"),
+        )
+
+    except sqlite3.DatabaseError:
+        logger.exception(
+            "Failed to insert ClinVar record: %s", data
+        )
+        raise
+
+    finally:
+        con.close()

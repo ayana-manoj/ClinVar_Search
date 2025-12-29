@@ -1,5 +1,5 @@
 from clinvar_query.utils.paths import processed_folder
-from clinvar_query.logger import logger
+from clinvar_query.utils.logger import logger
 import os
 
 

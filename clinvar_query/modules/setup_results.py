@@ -1,5 +1,5 @@
 import sqlite3
-from clinvar_query.modules.paths import database_file
+from clinvar_query.utils.paths import database_file
 
 
 def create_database(path):
@@ -12,46 +12,29 @@ def create_database(path):
     PRAGMA foreign_keys = ON;
 
     CREATE TABLE IF NOT EXISTS patient_information (
-        patient_ID TEXT PRIMARY KEY,
-        nhs_number INTEGER,
-        patient_first_name_last_name TEXT,
-        date_of_birth TEXT
+        patient_id TEXT PRIMARY KEY
     );
 
     CREATE TABLE IF NOT EXISTS variants (
         variant_id TEXT,
-        id_test_type TEXT PRIMARY KEY,
-        patient_ID TEXT,
-        date_annotated TIMESTAMP,
-        FOREIGN KEY (patient_ID) REFERENCES patient_information(patient_ID)
+        patient_id TEXT,
+        patient_variant TEXT PRIMARY KEY,
+        date_annotated DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (patient_id) REFERENCES patient_information(patient_id)
     );
 
-    CREATE TABLE IF NOT EXISTS ClinVar (
+    CREATE TABLE IF NOT EXISTS clinvar (
         variant_id TEXT PRIMARY KEY,
         consensus_classification TEXT,
-        HGVS TEXT,
-        associated_conditions TEXT
-    );
-
-    CREATE TABLE IF NOT EXISTS variant_info (
-        variant_id TEXT PRIMARY KEY,
-        chromosome TEXT,
-        gene TEXT
-    );
-
-    CREATE TABLE IF NOT EXISTS annotated_results (
-        test_id TEXT PRIMARY KEY,
-        variant_id TEXT,
-        HGVS TEXT,
-        chromosome TEXT,
+        hgvs TEXT,
+        associated_conditions TEXT,
         gene TEXT,
-        classification TEXT,
         star_rating TEXT,
         allele_frequency REAL,
-        date_annotated TEXT,
-        associated_conditions TEXT,
-        FOREIGN KEY (variant_id) REFERENCES variant_info(variant_id)
+        chromosome TEXT,
+        FOREIGN KEY (variant_id) REFERENCES variants (variant_id)
     );
+
     """
 
 

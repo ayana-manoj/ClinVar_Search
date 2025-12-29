@@ -1,4 +1,4 @@
-name: ClinVar_Search
+name: clinvar_search
 channels:
   - conda-forge
   - bioconda

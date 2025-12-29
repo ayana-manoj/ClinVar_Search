@@ -8,7 +8,6 @@ from clinvar_query.utils.paths import upload_folder, processed_folder
 from clinvar_query.utils.paths import error_folder, database_folder
 from clinvar_query.utils.paths import database_file
 from clinvar_query.utils.database_initialisation import database_initialise
-from flask import Flask
 
 
 def create_app():

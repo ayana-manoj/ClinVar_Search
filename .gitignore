@@ -22,6 +22,5 @@ clinvar_query/ClinVar_Site/__pycache__
 clinvar_query/instance
 
 tests/__pycache__
-__pycache__
-
-
+__pycache__/
+*.pyc

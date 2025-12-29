@@ -48,10 +48,10 @@ for json_file in json_files:
             "classification": classification,
             "star_rating": star_rating,
             "allele_frequency": allele_frequency,
-            "date_annotated": "",  # Optional, can fill if you have a date
+            "date_annotated": "",  
             "associated_conditions": associated_conditions
         }
 
         insert_annotated_result(data_to_insert)
 
-print("✅ All ClinVar JSON files processed into the database.")
+print(" All ClinVar JSON files processed into the database.")

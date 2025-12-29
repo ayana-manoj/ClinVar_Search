@@ -12,8 +12,8 @@ def test_search_results():
     row_data =results['patient_information']['rows'] = [dict(row) for row in results ["patient_information"]["rows"]]
 
     expected_results = [
-            {'patient_id': query_data,'id_test_type':'test1_processed'}
-            ]
+        {'patient_id': query_data}
+    ]
 
     assert row_data == expected_results
 

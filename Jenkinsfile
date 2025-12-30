@@ -32,7 +32,7 @@ pipeline {
                 // Remove any existing environment with the same name first
                 sh """#!/bin/bash
                 bash -c 'source ${CONDA_PREFIX}/etc/profile.d/conda.sh && \
-                         conda env remove -n ${CONDA_ENV_NAME} || true && \
+                         conda env remove -n ${CONDA_ENV_NAME}  -y || true && \
                          conda env create -f environment.yml'
                 """
             }

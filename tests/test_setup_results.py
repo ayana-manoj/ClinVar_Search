@@ -10,12 +10,12 @@ def test_db(tmp_path):
     """
     db_path = tmp_path / "test_clinvar.db"
     create_database(str(db_path))
-    return db_path
+    return str(db_path)
 
 def test_create_database_tables(test_db):
     """
     Verify that create_database creates the required tables
-    in a temporary database (CI-safe).
+    in a temporary database 
     """
     conn = sqlite3.connect(test_db)
     cursor = conn.cursor()

@@ -1,13 +1,21 @@
 import sqlite3
+import os
 from clinvar_query.utils.paths import database_file
 
 
-def create_database(path):
+def create_database(path=None):
     """
     Create SQLite database and tables.
 
-    db_path: optional path to database file (default is production DB)
+    path: optional path to database file (default is production DB)
     """
+    db_path = path or database_file
+    db_path = str(db_path)
+
+    parent_dir = os.path.dirname(db_path)
+    if parent_dir:
+        os.makedirs(parent_dir, exist_ok=True)
+
     sql_script = """
     PRAGMA foreign_keys = ON;
 
@@ -34,20 +42,15 @@ def create_database(path):
         chromosome TEXT,
         FOREIGN KEY (variant_id) REFERENCES variants (variant_id)
     );
-
     """
 
-
     try:
-        with sqlite3.connect(database_file) as con:
+        with sqlite3.connect(db_path) as con:
             cursor = con.cursor()
             cursor.executescript(sql_script)
             con.commit()
+
     except sqlite3.OperationalError as e:
-        print("Failed to create tables:", e)
+        raise RuntimeError(f"Database creation failed at {db_path}: {e}")
 
-    print("✅ Database and tables created successfully:", database_file)
-
-
-if __name__ == "__main__":
-    create_database(database_file)
+    print("✅ Database and tables created successfully:", db_path)

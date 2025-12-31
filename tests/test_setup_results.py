@@ -1,16 +1,17 @@
 import os
-os.environ["ClinVar_Search"] = os.path.abspath("tests")
-
 import sqlite3
 import pytest
 from clinvar_query.modules.setup_results import create_database
-from clinvar_query.utils.paths import database_file
 
+@pytest.fixture
+def test_db(tmp_path):
+    # Use pytest's temporary directory
+    db_path = tmp_path / "test_clinvar.db"
+    create_database(str(db_path))
+    return db_path
 
-def test_create_database_tables():
-    create_database(database_file)
-
-    conn = sqlite3.connect(database_file)
+def test_create_database_tables(test_db):
+    conn = sqlite3.connect(test_db)
     cursor = conn.cursor()
 
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
@@ -24,3 +25,4 @@ def test_create_database_tables():
     }
 
     assert expected_tables.issubset(tables)
+

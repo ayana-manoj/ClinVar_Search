@@ -1,9 +1,10 @@
-# tests/test_setup_results.py
+import os
+
+# ✅ THIS IS THE ONE THING
+os.environ["ClinVar_Search"] = os.path.abspath("tests")
 
 import pytest
 import sqlite3
-import os
-
 from clinvar_query.modules.setup_results import create_database
 
 TEST_DB_PATH = "tests/test_db/test_clinvar.db"

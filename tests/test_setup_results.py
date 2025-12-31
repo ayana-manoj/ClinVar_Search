@@ -8,7 +8,7 @@ def test_create_database_tables():
     Test that create_database creates required tables
     in the configured database path.
     """
-    create_database()  # ← production-configured path
+    create_database(database_file) 
 
     conn = sqlite3.connect(database_file)
     cursor = conn.cursor()
@@ -27,4 +27,4 @@ def test_create_database_tables():
     missing = expected_tables - tables
     assert not missing, f"Missing tables: {missing}"
 
-    assert not missing, f"Missing tables: {missing}"
+

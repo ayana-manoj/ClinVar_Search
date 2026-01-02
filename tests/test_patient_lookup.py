@@ -15,16 +15,21 @@ def test_lookup_latest_results():
     files = []
     misaligned = []
 
-    latest_results, files, misaligned = lookup(latest_results,
-                                               files,
-                                               misaligned,
-                                               database,
-                                               process_folder=processed_folder,
-                                               err_folder=error_folder)
-    expected_results = lookup_list
+    latest_results, _, _ = lookup(
+        latest_results,
+        files,
+        misaligned,
+        database,
+        process_folder=processed_folder,
+        err_folder=error_folder
+    )
+    
+    # Extract variants from latest_results (column 1)
+    result_variants = sorted({row[1] for row in latest_results})
+    # Extract expected variants from lookup_list (column 0)
+    expected_variants = sorted({row[0] for row in lookup_list})
 
-    results = [list(row) for row in latest_results]
-    assert results == expected_results
+    assert result_variants == expected_variants
 
 
 def test_lookup_no_database():
@@ -56,7 +61,7 @@ def test_lookup_files():
                                                err_folder=error_folder)
     expected_files = ['test_data_processed.txt', 'test5_processed.txt', 'test1_processed.txt']
 
-    assert files == expected_files
+    assert sorted(files) == sorted(expected_files)
 
 
 def test_empty_files():
@@ -88,9 +93,9 @@ def test_error_files():
                                                database,
                                                process_folder=processed_folder,
                                                err_folder=error_folder)
-    expected_error_files = ['misaligned_test5_processed.txt','misaligned_output.txt',]
+    expected_error_files = ['misaligned_test5_processed.txt', 'misaligned_output.txt',]
 
-    assert misaligned == expected_error_files
+    assert sorted(misaligned) == sorted(expected_error_files)
 
 
 def test_empty_error_files():

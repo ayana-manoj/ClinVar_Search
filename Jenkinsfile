@@ -30,36 +30,33 @@ pipeline {
             steps {
                 // Create Conda environment from environment.yml
                 // Remove any existing environment with the same name first
-                sh '''
-                #!/bin/bash
-                source ${CONDA_PREFIX}/etc/profile.d/conda.sh
-                conda env remove -n ${CONDA_ENV_NAME} || true
-                conda env create -f environment.yml
-                '''
+                sh """#!/bin/bash
+                bash -c 'source ${CONDA_PREFIX}/etc/profile.d/conda.sh && \
+                         conda env remove -n ${CONDA_ENV_NAME}  -y || true && \
+                         conda env create -f environment.yml'
+                """
             }
         }
 
         stage('Install Package') {
             steps {
                 // Activate environment and install current project
-                sh '''
-                #!/bin/bash
-                source ${CONDA_PREFIX}/etc/profile.d/conda.sh
-                conda activate ${CONDA_ENV_NAME}
-                pip install .
-                '''
+                sh """#!/bin/bash
+                bash -c 'source ${CONDA_PREFIX}/etc/profile.d/conda.sh && \
+                         conda activate ${CONDA_ENV_NAME} && \
+                         pip install .'
+                """
             }
         }
 
         stage('Run Tests') {
             steps {
                 // Run the test suite using pytest
-                sh '''
-                #!/bin/bash
-                source ${CONDA_PREFIX}/etc/profile.d/conda.sh
-                conda activate ${CONDA_ENV_NAME}
-                pytest --cov=clinvar_query tests/
-                '''
+                sh """#!/bin/bash
+                bash -c 'source ${CONDA_PREFIX}/etc/profile.d/conda.sh && \
+                         conda activate ${CONDA_ENV_NAME} && \
+                         pytest --cov=clinvar_query tests/'
+                """
             }
         }
     }

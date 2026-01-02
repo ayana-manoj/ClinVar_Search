@@ -5,6 +5,8 @@ channels:
 dependencies:
   - python==3.12.8
   - pip
+  - pytest
+  - pytest-cov
 
   - flask
   - dicttoxml

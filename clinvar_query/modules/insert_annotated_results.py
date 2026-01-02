@@ -15,6 +15,9 @@ import sqlite3
 from clinvar_query.utils.paths import database_file
 from clinvar_query.utils.logger import logger
 
+from clinvar_query.utils.paths import database_file
+from clinvar_query.utils.logger import logger
+
 
 def insert_patient_information(data):
     """

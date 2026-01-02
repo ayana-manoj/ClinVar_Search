@@ -11,9 +11,10 @@ def test_db_init():
 
 
 def test_db_creation(tmp_path):
-    init_db = database_initialise(tmp_path)
+    db_file = tmp_path / "test_clinvar.db" 
+    init_db = database_initialise(str(db_file))
 
-    assert tmp_path == init_db
+    assert str(db_file) == init_db  
 
 
 def test_db_fail():

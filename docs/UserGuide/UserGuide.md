@@ -32,7 +32,7 @@ This guide explains how to use the app entirely through the graphical user inter
 
 The ClinVar home screen contains:
 
-![image.png](ClinVar%20Search%20-%20User%20Guide/image.png)
+<img src="docs/UserGuide/images/image.png">
 
 - **Upload File** – Upload and process VCF or CSV files
 - **Search Data** – Search through uploaded and processed variant data
@@ -46,19 +46,19 @@ The ClinVar home screen contains:
 
 1. Click the **Go to Upload** button
 
-![image.png](ClinVar%20Search%20-%20User%20Guide/image%201.png)
+<img src="docs/UserGuide/images/image 1.png">
 
 1. Click within the highlighted area (red box) to select a VCF or CSV file from your computer, or drag and drop the file into the upload area.
 
-![image.png](ClinVar%20Search%20-%20User%20Guide/image%202.png)
+<img src="docs/UserGuide/images/image 2.png">
 
 1. Once the file has been selected, click **Upload**.
 
-![image.png](ClinVar%20Search%20-%20User%20Guide/image%203.png)
+<img src="docs/UserGuide/images/image 3.png">
 
 1. When the upload is complete, a confirmation message will be displayed.
 
-![image.png](ClinVar%20Search%20-%20User%20Guide/image%204.png)
+<img src="docs/UserGuide/images/image 4.png">
 
 *NB: If a file with the same name already exists, you will be given the option to overwrite the existing file.*
 
@@ -68,14 +68,14 @@ The ClinVar home screen contains:
 
 1. Click the View Results button.
 
-![image.png](ClinVar%20Search%20-%20User%20Guide/image%205.png)
+<img src="docs/UserGuide/images/image 5.png">
 
 1. This screen shows the most recent patient results and highlights any files that could not be processed correctly. 
 2. Click on the generated .txt result files to view all variants extracted from the uploaded VCF file.
 
-![image.png](ClinVar%20Search%20-%20User%20Guide/image%206.png)
+<img src="docs/UserGuide/images/image 6.png">
 
-![image.png](ClinVar%20Search%20-%20User%20Guide/image%207.png)
+<img src="docs/UserGuide/images/image 7.png">
 
 ---
 
@@ -83,13 +83,13 @@ The ClinVar home screen contains:
 
 1. Click **Go to Search** button,
 
-![image.png](ClinVar%20Search%20-%20User%20Guide/image%208.png)
+<img src="docs/UserGuide/images/image 8.png">
 
 1. Use the search field in the top-right corner to query the database by patient ID, variant ID, HGNC gene name, or HGVS nomenclature. The search returns a table displaying information for each matching variant.
 
-![image.png](ClinVar%20Search%20-%20User%20Guide/image%209.png)
+<img src="docs/UserGuide/images/image 9.png">
 
-![image.png](ClinVar%20Search%20-%20User%20Guide/image%2010.png)
+<img src="docs/UserGuide/images/image 10.png">
 
 ---
 

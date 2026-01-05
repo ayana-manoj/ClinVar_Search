@@ -1,6 +1,8 @@
 # ClinVar Search
 [![codecov](https://codecov.io/gh/ayana-manoj/ClinVar_Search/graph/badge.svg?token=NPD645KPET)](https://codecov.io/gh/ayana-manoj/ClinVar_Search)
 
+[GitHub Repo](https://github.com/ayana-manoj/ClinVar_Search)
+
 ## About
 
 ClinVar Search is a simple to use web based application for the purpose of annotating 
@@ -19,7 +21,7 @@ ClinVar Search is accessed by [installing locally](https://github.com/ayana-mano
 
 ## Features
 Overview of the workflow
-<img src="https://github.com/ayana-manoj/ClinVar_Search/blob/develop/docs/Overview.png" >
+![Alt text](docs/Overview.png)
 
 Users can input VCF or CSV files on to the 'Upload Files' page by simply dragging and dropping a file from their file explorer into the upload field. Variants are then parsed through a module to 
 standardise their format and saved as a text file. The variants are then validated with the module to query VariantValidator to return the associated HGVS nomenclature, which is stored in the project
@@ -61,7 +63,7 @@ ClinVar Search will work locally on Mac OS X or Linux-compatible computers. It c
 For installation instructions please see [INSTALLATION.md](docs/INSTALLATION.md).
 
 ## Operation Manuals
-Please see [MANUAL.md](docs/MANUAL.md). 
+Please see [UserGuide.md](docs/UserGuide/UserGuide.md). 
 
 ## Docker Installation
 To build the docker file

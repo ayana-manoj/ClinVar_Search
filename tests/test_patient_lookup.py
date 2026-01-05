@@ -1,3 +1,4 @@
+from tests.test_db.lookup_results import lookup_list
 from clinvar_query.modules.patient_lookup import lookup
 import pytest
 
@@ -8,7 +9,7 @@ error_folder = "tests/test_files/test_error"
 empty_folder = "tests/test_files/empty_folder"
 
 
-def test_lookup_latest_results(lookup_list):
+def test_lookup_latest_results():
     database = database_file
     latest_results = []
     files = []
@@ -130,4 +131,3 @@ def test_empty_error_files():
     )
 
     assert misaligned == []
-

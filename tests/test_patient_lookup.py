@@ -1,4 +1,4 @@
-from tests.test_db.lookup_results import lookup_list
+from .test_db.lookup_results import lookup_list
 from clinvar_query.modules.patient_lookup import lookup
 import pytest
 

@@ -95,11 +95,16 @@ The ClinVar home screen contains:
 
 ## Error Messages & What They Mean
 
-| Message | Meaning | What To Do |
-| --- | --- | --- |
-|  |  |  |
-|  |  |  |
-|  |  |  |
+| Message | What It Means / When It Appears |
+| --- | --- |
+| An unknown error has occurred | A fallback error shown when the system encounters an unexpected issue that doesn’t match a known error case. |
+| No file selected | The user attempted to upload or submit without choosing a file. |
+| Unsupported file type | The uploaded file format is not allowed or not recognized by the system. |
+| This file {file} already exists and was not overwritten | A file with the same name already exists, and the system was configured not to overwrite it. |
+| {file} was processed, but there was an error with your input. Check misaligned files in the results page | The file was processed and saved, but the input data did not align correctly (e.g., format or structure issues). |
+| {file} was successfully overwritten, but there was an error with your input. Check misaligned files in the results page | The file replaced an existing one, but input errors caused misalignment during processing. |
+| {file} has been overwritten successfully | The uploaded file replaced an existing file without any processing errors. |
+
 
 ---
 
@@ -108,9 +113,25 @@ The ClinVar home screen contains:
 ---
 
 ## Getting Help
-
+Please contact your local bioinformatician.
 ---
 
 ## License
 
-This application is provided under the MIT License. See the `LICENSE` file for details.
+Please see [LICENSE.txt](LICENSE.txt)
+
+> <LICENSE>
+  
+> This program is free software: you can redistribute it and/or modify
+> it under the terms of the GNU Affero General Public License as
+> published by the Free Software Foundation, either version 3 of the
+> License, or (at your option) any later version.
+>
+> This program is distributed in the hope that it will be useful,
+> but WITHOUT ANY WARRANTY; without even the implied warranty of
+> MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> GNU Affero General Public License for more details.
+>
+> You should have received a copy of the GNU Affero General Public License
+> along with this program.  If not, see <https://www.gnu.org/licenses/>.
+> </LICENSE>

@@ -46,19 +46,19 @@ The ClinVar home screen contains:
 
 1. Click the **Go to Upload** button
 
-<img src="docs/UserGuide/images/image%201.png">
+<img src="docs/UserGuide/images/image1.png">
 
 1. Click within the highlighted area (red box) to select a VCF or CSV file from your computer, or drag and drop the file into the upload area.
 
-<img src="docs/UserGuide/images/image%202.png">
+<img src="docs/UserGuide/images/image2.png">
 
 1. Once the file has been selected, click **Upload**.
 
-<img src="docs/UserGuide/images/image%203.png">
+<img src="docs/UserGuide/images/image3.png">
 
 1. When the upload is complete, a confirmation message will be displayed.
 
-<img src="docs/UserGuide/images/image%204.png">
+<img src="docs/UserGuide/images/image4.png">
 
 *NB: If a file with the same name already exists, you will be given the option to overwrite the existing file.*
 
@@ -68,14 +68,14 @@ The ClinVar home screen contains:
 
 1. Click the View Results button.
 
-<img src="docs/UserGuide/images/image%205.png">
+<img src="docs/UserGuide/images/image5.png">
 
 1. This screen shows the most recent patient results and highlights any files that could not be processed correctly. 
 2. Click on the generated .txt result files to view all variants extracted from the uploaded VCF file.
 
-<img src="docs/UserGuide/images/image%206.png">
+<img src="docs/UserGuide/images/image6.png">
 
-<img src="docs/UserGuide/images/image%207.png">
+<img src="docs/UserGuide/images/image7.png">
 
 ---
 
@@ -83,13 +83,13 @@ The ClinVar home screen contains:
 
 1. Click **Go to Search** button,
 
-<img src="docs/UserGuide/images/image%208.png">
+<img src="docs/UserGuide/images/image8.png">
 
 1. Use the search field in the top-right corner to query the database by patient ID, variant ID, HGNC gene name, or HGVS nomenclature. The search returns a table displaying information for each matching variant.
 
-<img src="docs/UserGuide/images/image%209.png">
+<img src="docs/UserGuide/images/image9.png">
 
-<img src="docs/UserGuide/images/image%2010.png">
+<img src="docs/UserGuide/images/image10.png">
 
 ---
 

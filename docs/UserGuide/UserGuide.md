@@ -32,7 +32,7 @@ This guide explains how to use the app entirely through the graphical user inter
 
 The ClinVar home screen contains:
 
-<img src="docs/UserGuide/images/image.png">
+<img src="images/image.png">
 
 - **Upload File** – Upload and process VCF or CSV files
 - **Search Data** – Search through uploaded and processed variant data

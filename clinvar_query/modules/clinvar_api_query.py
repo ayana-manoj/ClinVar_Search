@@ -1,3 +1,22 @@
+"""
+
+*********** CHATGPT USED IN THE CREATION OF THIS MODULE ***********
+
+ClinVar query and annotation pipeline.
+
+This module queries the NCBI ClinVar database using HGVS variant strings,
+retrieves matching ClinVar record identifiers (RCV IDs), and fetches
+summary metadata via the NCBI E-utilities API.
+
+Input variants are read from JSON files produced by a prior validation
+step, and results are written to a corresponding output directory.
+
+Notes
+-----
+- NCBI E-utilities usage guidelines are respected by throttling requests.
+- Network or parsing errors are logged and handled gracefully.
+"""
+
 import json
 import requests
 import time
@@ -7,6 +26,7 @@ from clinvar_query.utils.logger import logger
 from clinvar_query.utils.paths import validator_folder, clinvar_folder
 
 # ----------------- NCBI E-utilities URLs -----------------
+# Base endpoints for searching ClinVar and retrieving summary metadata
 ESUMMARY_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
 ESEARCH_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
 
@@ -16,20 +36,30 @@ def search_clinvar(hgvs: str) -> list:
     ESUMMARY_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
     ESEARCH_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
     """
-    Search ClinVar for a given HGVS variant and return ClinVar IDs (RCV IDs).
+        Search ClinVar for a given HGVS variant string.
 
-    Parameters
-    ----------
-    hgvs : str
-        HGVS string representing the genomic variant.
+        This function queries the NCBI ESearch API against the ClinVar
+        database and returns a list of matching ClinVar record IDs (RCVs).
 
-    Returns
-    -------
-    list
-        A list of ClinVar RCV IDs matching the HGVS variant.
-        Returns an empty list if no IDs are found or an error occurs.
-    """
+        Parameters
+        ----------
+        hgvs : str
+            HGVS string representing a genomic variant (e.g., g.HGVS).
+
+        Returns
+        -------
+        list of str
+            List of ClinVar RCV IDs matching the HGVS query.
+            Returns an empty list if no matches are found or an error occurs.
+
+        Notes
+        -----
+        - This function performs a network request and may raise latency.
+        - Errors are logged but not propagated to allow batch processing.
+        """
+
     params = {"db": "clinvar", "term": hgvs, "retmode": "json"}
+
     try:
         response = requests.get(ESEARCH_URL, params=params)
         response.raise_for_status()
@@ -43,20 +73,30 @@ def search_clinvar(hgvs: str) -> list:
 
 def get_esummary(clinvar_ids: list) -> dict:
     ESUMMARY_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
-    """
-    Fetch ClinVar esummary information for a list of ClinVar IDs.
 
-    Parameters
-    ----------
-    clinvar_ids : list
-        List of ClinVar RCV IDs to fetch summaries for.
-
-    Returns
-    -------
-    dict
-        JSON dictionary containing the ClinVar esummary results.
-        Returns an empty dictionary if no IDs are provided or an error occurs.
     """
+        Retrieve ClinVar summary metadata for a list of ClinVar IDs.
+
+        This function queries the NCBI ESummary API and returns summary
+        information for each supplied ClinVar RCV identifier.
+
+        Parameters
+        ----------
+        clinvar_ids : list of str
+            List of ClinVar RCV IDs to retrieve summaries for.
+
+        Returns
+        -------
+        dict
+            Dictionary containing the ESummary results keyed by ClinVar ID.
+            Returns an empty dictionary if no IDs are provided or an error occurs.
+
+        Notes
+        -----
+        - If `clinvar_ids` is empty, the API call is skipped.
+        - Errors are logged but do not interrupt processing.
+        """
+
     if not clinvar_ids:
         return {}
 
@@ -70,10 +110,34 @@ def get_esummary(clinvar_ids: list) -> dict:
         return {}
 
 def process_clinvar(input_dir, output_dir):
+    """
+        Process validated variant JSON files and annotate them with ClinVar data.
+
+        For each input JSON file:
+        - Extract g.HGVS notations for each variant
+        - Query ClinVar for matching RCV IDs
+        - Fetch summary metadata for each RCV
+        - Write results to a corresponding output JSON file
+
+        Parameters
+        ----------
+        input_dir : str or pathlib.Path
+            Directory containing validated variant JSON files.
+        output_dir : str or pathlib.Path
+            Directory where ClinVar-annotated JSON files will be written.
+
+        Notes
+        -----
+        - Files already present in the output directory are skipped.
+        - A small delay is inserted between API calls to comply with
+          NCBI rate-limiting recommendations.
+        """
     # ----------------- Main Processing -----------------
     # Define input and output directories
     ESEARCH_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
     ESUMMARY_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
+
+    # Ensure output directory exists
     os.makedirs(output_dir, exist_ok=True)
 
     # List all JSON files in the input directory

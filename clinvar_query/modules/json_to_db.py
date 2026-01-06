@@ -7,7 +7,8 @@ into the database.
 
 This script:
 - Reads ClinVar JSON files from a configured directory
-- Extracts variant, gene, classification, and frequency data
+- Extracts variant, HGNC gene symbol, consensus classification,
+  associated conditions, star rating, and allele frequency
 - Normalises ClinVar review status into star ratings
 - Inserts patient, variant, and ClinVar records into the database
 - Logs progress, warnings, and errors using a rotating file logger

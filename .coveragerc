@@ -1,9 +1,8 @@
 [run]
 source = 
     clinvar_query
-    clinvar_query.ClinVar_Site
 branch = True
 
 [report]
 show_missing = True
-skip_covered = True
+skip_covered = False

@@ -1,6 +1,47 @@
 Started by user Ayana Elan Manoj
-15:39:30 Connecting to https://api.github.com with no credentials, anonymous access
-Obtained Jenkinsfile from 4f00f0d9c32b67e87d2495be2cc3d8a364d83efc
+17:51:48 Connecting to https://api.github.com with no credentials, anonymous access
+17:51:49 Jenkins-Imposed API Limiter: Current quota for Github API usage has 20 remaining (1 over budget). Next quota of 60 in 9 min 51 sec. Sleeping for 4 min 30 sec.
+17:51:49 Jenkins is attempting to evenly distribute GitHub API requests. To configure a different rate limiting strategy, such as having Jenkins restrict GitHub API requests only when near or above the GitHub rate limit, go to "GitHub API usage" under "Configure System" in the Jenkins settings.
+ERROR: Could not do lightweight checkout, falling back to heavyweight
+java.lang.InterruptedException: sleep interrupted
+	at java.base/java.lang.Thread.sleep(Native Method)
+	at PluginClassLoader for github-branch-source//org.jenkinsci.plugins.github_branch_source.ApiRateLimitChecker$LocalChecker.waitUntilRateLimit(ApiRateLimitChecker.java:325)
+	at PluginClassLoader for github-branch-source//org.jenkinsci.plugins.github_branch_source.ApiRateLimitChecker$LocalChecker.checkRateLimit(ApiRateLimitChecker.java:271)
+	at PluginClassLoader for github-branch-source//org.jenkinsci.plugins.github_branch_source.ApiRateLimitChecker$RateLimitCheckerAdapter.checkRateLimit(ApiRateLimitChecker.java:244)
+	at PluginClassLoader for github-api//org.kohsuke.github.GitHubRateLimitChecker.checkRateLimit(GitHubRateLimitChecker.java:144)
+Caused: java.io.InterruptedIOException: sleep interrupted
+	at PluginClassLoader for github-api//org.kohsuke.github.GitHubRateLimitChecker.checkRateLimit(GitHubRateLimitChecker.java:158)
+	at PluginClassLoader for github-api//org.kohsuke.github.GitHubClient.sendRequest(GitHubClient.java:460)
+Caused: org.kohsuke.github.HttpException: Server returned HTTP response code: -1, message: 'null' for URL: https://api.github.com/repos/ayana-manoj/ClinVar_Search/contents/Jenkinsfile?ref=ed121dd75811e8998268aafcbaa6720574399c5d
+	at PluginClassLoader for github-api//org.kohsuke.github.GitHubClient.interpretApiError(GitHubClient.java:745)
+	at PluginClassLoader for github-api//org.kohsuke.github.GitHubClient.sendRequest(GitHubClient.java:480)
+	at PluginClassLoader for github-api//org.kohsuke.github.GitHubClient.sendRequest(GitHubClient.java:427)
+	at PluginClassLoader for github-api//org.kohsuke.github.Requester.fetch(Requester.java:85)
+	at PluginClassLoader for github-api//org.kohsuke.github.GHRepository.getFileContent(GHRepository.java:2693)
+	at PluginClassLoader for github-branch-source//org.jenkinsci.plugins.github_branch_source.GitHubSCMFile.metadata(GitHubSCMFile.java:110)
+	at PluginClassLoader for github-branch-source//org.jenkinsci.plugins.github_branch_source.GitHubSCMFile.content(GitHubSCMFile.java:186)
+	at PluginClassLoader for scm-api//jenkins.scm.api.SCMFile.contentAsString(SCMFile.java:335)
+	at PluginClassLoader for workflow-multibranch//org.jenkinsci.plugins.workflow.multibranch.SCMBinder.create(SCMBinder.java:113)
+	at PluginClassLoader for workflow-job//org.jenkinsci.plugins.workflow.job.WorkflowRun.run(WorkflowRun.java:317)
+	at hudson.model.ResourceController.execute(ResourceController.java:101)
+	at hudson.model.Executor.run(Executor.java:460)
+Checking out git https://github.com/ayana-manoj/ClinVar_Search.git into /var/lib/jenkins/workspace/ClinVar_Search_Sprint3@script/9afca34a6eb759362b7c69b02e14c8b5516ef8ab5bf7239e051be9e33f0b5666 to read Jenkinsfile
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/ClinVar_Search_Sprint3@script/9afca34a6eb759362b7c69b02e14c8b5516ef8ab5bf7239e051be9e33f0b5666/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/ayana-manoj/ClinVar_Search.git # timeout=10
+Fetching without tags
+Fetching upstream changes from https://github.com/ayana-manoj/ClinVar_Search.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.34.1'
+ > git fetch --no-tags --force --progress -- https://github.com/ayana-manoj/ClinVar_Search.git +refs/heads/Sprint3:refs/remotes/origin/Sprint3 # timeout=10
+Checking out Revision ed121dd75811e8998268aafcbaa6720574399c5d (Sprint3)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f ed121dd75811e8998268aafcbaa6720574399c5d # timeout=10
+Commit message: "Update .coveragerc"
+ > git rev-list --no-walk f0d2224fb2b54ae0e00fda6704cfc8b275df9b90 # timeout=10
 [Pipeline] Start of Pipeline
 [Pipeline] node
 Running on Jenkins in /var/lib/jenkins/workspace/ClinVar_Search_Sprint3
@@ -19,11 +60,10 @@ Fetching upstream changes from https://github.com/ayana-manoj/ClinVar_Search.git
  > git --version # timeout=10
  > git --version # 'git version 2.34.1'
  > git fetch --no-tags --force --progress -- https://github.com/ayana-manoj/ClinVar_Search.git +refs/heads/Sprint3:refs/remotes/origin/Sprint3 # timeout=10
-Checking out Revision 4f00f0d9c32b67e87d2495be2cc3d8a364d83efc (Sprint3)
+Checking out Revision ed121dd75811e8998268aafcbaa6720574399c5d (Sprint3)
  > git config core.sparsecheckout # timeout=10
- > git checkout -f 4f00f0d9c32b67e87d2495be2cc3d8a364d83efc # timeout=10
-Commit message: "made numbering changes in user manual (Documentation Sprint #28)"
- > git rev-list --no-walk 7a47811b4cfeec5242272636b415955c9e92aaa1 # timeout=10
+ > git checkout -f ed121dd75811e8998268aafcbaa6720574399c5d # timeout=10
+Commit message: "Update .coveragerc"
 [Pipeline] }
 [Pipeline] // stage
 [Pipeline] withEnv
@@ -44,10 +84,10 @@ Fetching upstream changes from https://github.com/ayana-manoj/ClinVar_Search.git
  > git --version # timeout=10
  > git --version # 'git version 2.34.1'
  > git fetch --no-tags --force --progress -- https://github.com/ayana-manoj/ClinVar_Search.git +refs/heads/Sprint3:refs/remotes/origin/Sprint3 # timeout=10
-Checking out Revision 4f00f0d9c32b67e87d2495be2cc3d8a364d83efc (Sprint3)
+Checking out Revision ed121dd75811e8998268aafcbaa6720574399c5d (Sprint3)
  > git config core.sparsecheckout # timeout=10
- > git checkout -f 4f00f0d9c32b67e87d2495be2cc3d8a364d83efc # timeout=10
-Commit message: "made numbering changes in user manual (Documentation Sprint #28)"
+ > git checkout -f ed121dd75811e8998268aafcbaa6720574399c5d # timeout=10
+Commit message: "Update .coveragerc"
 [Pipeline] }
 [Pipeline] // stage
 [Pipeline] stage
@@ -145,7 +185,7 @@ The following packages will be REMOVED:
 Downloading and Extracting Packages: ...working... done
 Preparing transaction: - done
 Verifying transaction: | done
-Executing transaction: - \ | / - \ | / - \ | done
+Executing transaction: - \ | / done
 CI detected...
 2 channel Terms of Service accepted
 Channels:
@@ -153,7 +193,7 @@ Channels:
  - bioconda
  - defaults
 Platform: linux-64
-Collecting package metadata (repodata.json): - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | done
+Collecting package metadata (repodata.json): - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | done
 Solving environment: - \ done
 
 
@@ -169,8 +209,8 @@ Please update conda by running
 
 Downloading and Extracting Packages: ...working... done
 Preparing transaction: / - \ | done
-Verifying transaction: - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / done
-Executing transaction: \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / done
+Verifying transaction: - \ | / - \ | / - \ | / - \ | / - \ | done
+Executing transaction: - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | done
 #
 # To activate this environment, use
 #
@@ -185,20 +225,22 @@ Executing transaction: \ | / - \ | / - \ | / - \ | /
 [Pipeline] stage
 [Pipeline] { (Install Package)
 [Pipeline] sh
-Processing /var/lib/jenkins/workspace/ClinVar_Search_Sprint3
+Obtaining file:///var/lib/jenkins/workspace/ClinVar_Search_Sprint3
   Installing build dependencies: started
   Installing build dependencies: finished with status 'done'
-  Getting requirements to build wheel: started
-  Getting requirements to build wheel: finished with status 'done'
-  Preparing metadata (pyproject.toml): started
-  Preparing metadata (pyproject.toml): finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
 Requirement already satisfied: setuptools==80.9.0 in /var/lib/jenkins/.conda/envs/clinvar_search/lib/python3.12/site-packages (from clinvar_query==0.0.1) (80.9.0)
 Requirement already satisfied: wheel==0.45.1 in /var/lib/jenkins/.conda/envs/clinvar_search/lib/python3.12/site-packages (from clinvar_query==0.0.1) (0.45.1)
 Building wheels for collected packages: clinvar_query
-  Building wheel for clinvar_query (pyproject.toml): started
-  Building wheel for clinvar_query (pyproject.toml): finished with status 'done'
-  Created wheel for clinvar_query: filename=clinvar_query-0.0.1-py3-none-any.whl size=3399317 sha256=cc8e8a24384ac99abe557ed66e1531b29276d47484ffe6724e08d7f826fc5803
-  Stored in directory: /tmp/pip-ephem-wheel-cache-o_tb8zvb/wheels/be/e0/65/035b0c6fc04f12282f54fccd4499bd7529285e4b46dece380d
+  Building editable for clinvar_query (pyproject.toml): started
+  Building editable for clinvar_query (pyproject.toml): finished with status 'done'
+  Created wheel for clinvar_query: filename=clinvar_query-0.0.1-0.editable-py3-none-any.whl size=29735 sha256=b17bb53193226a8e49d288bc9fce244c39089fbd9f422456efc3064ca4a1cee3
+  Stored in directory: /tmp/pip-ephem-wheel-cache-jxa7bgnz/wheels/be/e0/65/035b0c6fc04f12282f54fccd4499bd7529285e4b46dece380d
 Successfully built clinvar_query
 Installing collected packages: clinvar_query
 Successfully installed clinvar_query-0.0.1
@@ -226,36 +268,43 @@ tests/test_read_upload.py .....                                          [ 82%]
 tests/test_save_function.py ....                                         [ 87%]
 tests/test_search_results.py ..                                          [ 90%]
 tests/test_setup_results.py .                                            [ 91%]
-tests/test_vv_variant_query.py ....../var/lib/jenkins/.conda/envs/clinvar_search/lib/python3.12/site-packages/coverage/control.py:958: CoverageWarning: No data was collected. (no-data-collected); see https://coverage.readthedocs.io/en/7.13.1/messages.html#warning-no-data-collected
-  self._warn("No data was collected.", slug="no-data-collected")
-                                    [100%]
+tests/test_vv_variant_query.py ......                                    [100%]
 
 ================================ tests coverage ================================
 _______________ coverage: platform linux, python 3.12.8-final-0 ________________
 
-Name                                                Stmts   Miss  Cover   Missing
----------------------------------------------------------------------------------
-clinvar_query/modules/check_file_status.py             19     19     0%   1-40
-clinvar_query/modules/clinvar_api_query.py             84     84     0%   20-216
-clinvar_query/modules/insert_annotated_results.py      47     47     0%   17-220
-clinvar_query/modules/json_to_db.py                    97     97     0%   19-275
-clinvar_query/modules/parser.py                        40     40     0%   2-61
-clinvar_query/modules/patient_lookup.py                29     29     0%   1-80
-clinvar_query/modules/process_uploads.py               30     30     0%   1-73
-clinvar_query/modules/read_uploads.py                  17     17     0%   1-33
-clinvar_query/modules/save_function.py                 22     22     0%   1-47
-clinvar_query/modules/search_results.py                26     26     0%   1-55
-clinvar_query/modules/setup_results.py                 18     18     0%   1-56
-clinvar_query/modules/vv_variant_query.py              64     64     0%   30-186
-clinvar_query/utils/database_initialisation.py         13     13     0%   1-22
-clinvar_query/utils/logger.py                          23     23     0%   1-42
-clinvar_query/utils/messages.py                         3      3     0%   5-18
-clinvar_query/utils/paths.py                           16     16     0%   1-35
----------------------------------------------------------------------------------
-TOTAL                                                 548    548     0%
-
-2 empty files skipped.
-============================== 74 passed in 2.78s ==============================
+Name                                                Stmts   Miss Branch BrPart  Cover   Missing
+-----------------------------------------------------------------------------------------------
+clinvar_query/ClinVar_Site/__init__.py                 27     16      0      0    41%   14-38
+clinvar_query/ClinVar_Site/app.py                       5      5      2      0     0%   1-7
+clinvar_query/ClinVar_Site/routes/main_routes.py        9      2      0      0    78%   9, 21
+clinvar_query/ClinVar_Site/routes/results.py           20      8      0      0    60%   26-38, 45, 50
+clinvar_query/ClinVar_Site/routes/search_site.py       13      7      2      0    40%   27-39
+clinvar_query/ClinVar_Site/routes/upload.py            48     30      8      0    32%   33-36, 41-78, 84-94, 99-103
+clinvar_query/__init__.py                               0      0      0      0   100%
+clinvar_query/main.py                                   0      0      0      0   100%
+clinvar_query/modules/__init__.py                       0      0      0      0   100%
+clinvar_query/modules/check_file_status.py             19      2      4      0    91%   26-27
+clinvar_query/modules/clinvar_api_query.py             84      3     16      2    95%   155-156, 216
+clinvar_query/modules/insert_annotated_results.py      47     12      0      0    74%   73-78, 131-135, 169-175, 215-219
+clinvar_query/modules/json_to_db.py                    97      1     38     10    92%   127->133, 135->145, 136->145, 138->136, 163->169, 182->180, 193->214, 195->214, 198->195, 275
+clinvar_query/modules/parser.py                        40      1     14      1    96%   27
+clinvar_query/modules/patient_lookup.py                29      4      6      3    80%   47-48, 50->54, 66, 76
+clinvar_query/modules/process_uploads.py               30      3     18      5    83%   23, 41-42, 59->65, 65->exit, 71->exit
+clinvar_query/modules/read_uploads.py                  17      3      4      1    81%   24, 31-32
+clinvar_query/modules/save_function.py                 22      2      2      0    92%   38-39
+clinvar_query/modules/search_results.py                26      4      8      2    82%   33, 48-50, 53->55
+clinvar_query/modules/setup_results.py                 18      2      2      1    85%   17->20, 54-55
+clinvar_query/modules/vv_variant_query.py              64      5     12      2    91%   130-131, 184-186
+clinvar_query/utils/__init__.py                         0      0      0      0   100%
+clinvar_query/utils/__main__.py                         0      0      0      0   100%
+clinvar_query/utils/database_initialisation.py         13      2      2      0    87%   21-22
+clinvar_query/utils/logger.py                          23      1      2      1    92%   39
+clinvar_query/utils/messages.py                         3      1      0      0    67%   18
+clinvar_query/utils/paths.py                           16      1      0      0    94%   31
+-----------------------------------------------------------------------------------------------
+TOTAL                                                 670    115    140     28    81%
+============================== 74 passed in 2.69s ==============================
 [Pipeline] }
 [Pipeline] // stage
 [Pipeline] stage
@@ -272,4 +321,3 @@ CI pipeline finished.
 [Pipeline] // node
 [Pipeline] End of Pipeline
 Finished: SUCCESS
-

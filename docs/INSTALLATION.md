@@ -24,5 +24,7 @@ After installing conda you can create a new virtual environment with the correct
 
 `$ conda env create -f environment.yml`
 `$ conda activate clinvar_search`
-Ensuring that you are in the ClinVar_Search directory, to run and open the app.
+
+To run the web application, first ensure you are in the ClinVar_Search directory, then run this command.
+
 `$ clinvar_query/ClinVar_Site/app.py & python -m webbrowser http://127.0.0.1:5000`

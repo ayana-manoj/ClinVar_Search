@@ -42,5 +42,3 @@ def search_site():
                            results=results)
 # This is what the user enters into the search bar,
 # it is stripped of any whitespaces
-
-# route to show patient results

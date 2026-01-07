@@ -6,9 +6,8 @@ import os
 import pytest
 """
 This tests the save function
-it was originally in the app.py
-now has been separated and will be tested
-
+This looks at each outcome of file processing
+Once that has been evaluated, it saves the file in a specified location
 """
 processed_folder = "tests/test_files/test_processed"
 data = "tests/test_files/test1.csv"

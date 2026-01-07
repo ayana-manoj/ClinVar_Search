@@ -4,6 +4,13 @@ from pathlib import Path
 import os
 import pytest
 
+"""Test for checking the outcome of file processing
+This is a set of tests which check the outputs of the app_file_check module
+This tests:
+Processed files with no errors
+Misaligned files
+The status of files, whether created, skipped or overwritten
+"""
 
 process_file = "tests/test_files/test1.csv"
 misalign_file = "tests/test_files/test5.csv"

@@ -13,6 +13,8 @@ Example input
 Example output
 12-40294866-G-T
 """
+#debugged and optimised with chatGPT
+
     variants = []
     misaligned_rows = []
     try:

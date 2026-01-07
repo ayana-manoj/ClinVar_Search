@@ -5,11 +5,20 @@ from clinvar_query.utils.paths import processed_folder, error_folder
 from clinvar_query.utils.paths import database_file
 
 """
-This executes a sql query to output patient results in the results page
+The lookup module uses a sql query to output patient results in the results page
+This uses left join to combine variants and clinvar data
+and is sorted by the latest date to ensure only 1 patient is used
 this is fed in latest_results to output
 patient id, variant id, consensus classification, star rating, date annotated
 
+The file lookup section validates the existence of:
+processed file folder
+misaligned file folder
+
+This is then sorted by date
+
 """
+#debugged with chatGPT
 
 def lookup(latest_results, files, misaligned, database,
            process_folder, err_folder):
@@ -41,7 +50,7 @@ def lookup(latest_results, files, misaligned, database,
         if 'con' in locals():
             con.close()
 
-    # processed patient file lookup
+    # processed patient file lookup made with chatGPT
     try:
         if os.path.exists(process_folder):
             files = [file for file in os.listdir(process_folder)
@@ -52,7 +61,7 @@ def lookup(latest_results, files, misaligned, database,
                     process_folder, file)),
                 reverse=True
             )
-    # files with errors in them
+    # files with errors in them made with chatGPT
         else:
             files = []
         if os.path.exists(err_folder):

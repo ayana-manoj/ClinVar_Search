@@ -1,4 +1,5 @@
 <!doctype html>
+ <!--made with chatGPT -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -28,7 +29,7 @@
         <li class="nav-item"><a class="nav-link" href="{{ url_for('lookup.result') }}">Results</a></li>
       </ul>
 
-      <!-- Search form in navbar, still a work in progress, will hopefully involve query database -->
+      <!-- Search form in navbar -->
       <form class="d-flex" method="GET" action="{{ url_for('search.search_site') }}">
         <input class="form-control me-2" type="search" name="q" placeholder="Search..." aria-label="Search">
         <button class="btn btn-light" type="submit">Search</button>
@@ -36,10 +37,10 @@
     </div>
   </div>
 </nav>
-  <!-- Main content: the other pages will have this -->
+  <!-- Main content -->
   <div class="container mt-4">
     {% block content %}
-    <!-- Default content (can be empty) -->
+    <!-- Default content  -->
     {% endblock %}
   </div>
 

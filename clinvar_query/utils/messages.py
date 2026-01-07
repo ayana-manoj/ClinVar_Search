@@ -1,3 +1,6 @@
+""""This is a dictionary of messages which are required for modules
+This allows for easier changes to the site without having to directly change the app"""
+
 
 app_messages = {
     "unknown_error": "An unknown error has occurred",

@@ -3,8 +3,19 @@ from clinvar_query.ClinVar_Site import create_app
 import pytest
 from werkzeug.datastructures import FileStorage
 
+#made with some help from chatGPT
+
 """"Since processing upload files actually returns a dictionary of values
-testing this will involve"""
+testing this will involve reviewing the dictionary outputs
+This test looks at how the site will handle the processing of uploaded files
+This tests:
+The process of uplading files with several states
+File state:
+processed, error
+Overwrite state:
+created, skipped
+It also tests for invalid files
+"""
 
 folder = "tests/test_files/test_output"
 p1 = "tests/test_files/test1.csv"

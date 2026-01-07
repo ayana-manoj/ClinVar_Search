@@ -2,6 +2,19 @@ from .test_db.lookup_results import lookup_list
 from clinvar_query.modules.patient_lookup import lookup
 import pytest
 
+"""This tests the patient lookup module
+since this executes a sql query, some dummy data in the test folder was created
+This allows for testing new implementations of the database if changes are needed
+For database lookup (latest results), this looks for:
+Normal use case
+No database
+
+For file lookup (processed and misaligned files), this looks for:
+Normal files 
+Error files 
+Empty files
+
+"""
 
 database_file = "tests/test_db/test.db"
 processed_folder = "tests/test_files/test_processed"

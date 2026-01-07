@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+ <!--made with chatGPT -->
 {% block title %}Home | Clinvar Upload{% endblock %}
 
 {% block content %}
@@ -94,7 +94,7 @@
   function handleFiles(files) {
     if (files.length > 0) {
       fileMessage.textContent = `File selected: ${files[0].name}. Press Upload to continue.`;
-      uploadBtn.disabled = false;      // The upload button is disable by default, this ensure that only uploading a file will allow you to submit it for processing
+      uploadBtn.disabled = false;      // The upload button is disabled by default, this ensure that only uploading a file will allow you to submit it for processing
       fileInput.files = files;         // 
     } else {
       fileMessage.textContent = "";
@@ -117,8 +117,8 @@
     e.preventDefault();
     dropZone.classList.remove('dragover');
 
-    const files = e.dataTransfer.files;   // get dropped files
-    handleFiles(files);                    // process files using the Handle files function
+    const files = e.dataTransfer.files;  
+    handleFiles(files);                   
   });
 
   // Click-to-open file picker

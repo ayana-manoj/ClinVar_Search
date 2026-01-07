@@ -4,12 +4,15 @@ from clinvar_query.utils.logger import logger
 from clinvar_query.modules.read_uploads import read_file
 import pytest
 
+#made with some help from chatGPT
+"""This tests the reading of files in the results page
+This creates a flask app and requests the processed or error file"""
+
+
+
 
 processed_folder = "tests/test_files/test_processed"
 error_folder = "tests/test_files/test_error"
-
-
-
 
 
 def test_read_file():

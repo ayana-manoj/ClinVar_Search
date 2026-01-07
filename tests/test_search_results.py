@@ -1,6 +1,6 @@
 from clinvar_query.modules.search_results import search_results
 
-
+"""this tests the search function"""
 
 database_file = "tests/test_db/test.db"
 

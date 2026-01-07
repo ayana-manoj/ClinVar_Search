@@ -3,9 +3,16 @@ from clinvar_query.utils.logger import logger
 from pathlib import Path
 import pytest
 
+"""This tests the file parser, for both csv and vcf files
+This evaluates:
+expected outputs
+Error messages
+Processed files
+Misaligned files
+"""
+
 csv_file_1 = "tests/test_files/test1.csv"
 vcf_file_1 = "tests/test_files/test1.vcf"
-
 csv_file_5 = "tests/test_files/test5.csv"
 vcf_file_5 = "tests/test_files/test5.vcf"
 def test_csv_parser():

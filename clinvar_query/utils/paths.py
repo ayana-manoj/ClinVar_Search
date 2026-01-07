@@ -1,6 +1,14 @@
 from pathlib import Path
 import os
 
+"""
+This initialises all of the paths for the app to function
+If there are any changes or new directories, it will be made here
+and referenced in the app.
+This allows for changes to be made to file locations with minimal changes to code
+"""
+
+
 parent_directory = Path(os.environ.get("ClinVar_Search", Path.cwd())).resolve()
 base_directory = parent_directory/ "clinvar_query"
 

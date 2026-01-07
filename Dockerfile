@@ -1,5 +1,6 @@
 FROM python:3.12.8
 # Allow for user permissions to be set here so that the data can be written in CLinVar Search
+#debugged with chatGPT 
 
 ARG UID=1000
 ARG GID=1000

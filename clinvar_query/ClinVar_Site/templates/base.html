@@ -1,0 +1,50 @@
+<!doctype html>
+ <!--made with chatGPT -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clinvar Search</title>
+  <!--for the page -->
+  <link rel="stylesheet" href="{{ url_for('static', filename= 'bootstrap/css/bootstrap.min.css')}}">
+  <!-- for the icons-->
+  <link rel="stylesheet" href="{{ url_for('static', filename= 'bootstrap/bootstrap-icons/bootstrap-icons.css')}}">
+
+</head>
+<body>
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{{ url_for('main.index') }}">Clinvar Search  <i class="bi bi-search"></i> </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.upload_site') }}">Upload</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('search.search_site') }}">Search</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('lookup.result') }}">Results</a></li>
+      </ul>
+
+      <!-- Search form in navbar -->
+      <form class="d-flex" method="GET" action="{{ url_for('search.search_site') }}">
+        <input class="form-control me-2" type="search" name="q" placeholder="Search..." aria-label="Search">
+        <button class="btn btn-light" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+  <!-- Main content -->
+  <div class="container mt-4">
+    {% block content %}
+    <!-- Default content  -->
+    {% endblock %}
+  </div>
+
+    <!-- Bootstrap JS -->
+  <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

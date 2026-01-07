@@ -1,0 +1,52 @@
+[project]
+name = "clinvar_query"
+version = "0.0.1"
+description = "Formats CSV and VCF files to annotate data using clinvar "
+license = {file = "LICENSE.txt"}
+authors = [{name = "Ayana Manoj, Harbi Nuur, Kamlesh Vyas"}]
+readme = "README.md"
+keywords = [
+    "bioinformatics",
+    "DNA Sequence",
+    "API",
+    "CSV files",
+    "VCF files",
+]
+requires-python = ">=3.12.8"
+
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Scientists", "Developers",
+    "Topic :: Software Development :: Build Tools",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Programming Language :: Python :: 3.12.8"
+]
+
+#load dependencies
+
+dependencies = [
+    "setuptools==80.9.0",
+    "wheel==0.45.1",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["clinvar_query"]
+omit = [
+    "clinvar_query/ClinVar_Site/*",
+    "clinvar_query/**/__init__.py",
+]
+
+[tool.coverage.report]
+skip_empty = true
+show_missing = true
+
+[tool.setuptools_scm]
+
+[tool.setuptools.packages.find]
+where = ["."]  # Look for packages in the  root directory
+include = ["clinvar_query*"]
+
+[build-system]
+requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2", "wheel"]
+build-backend = "setuptools.build_meta"

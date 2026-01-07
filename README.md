@@ -71,8 +71,13 @@ For installation instructions please see [INSTALLATION.md](docs/INSTALLATION.md)
 Please see [UserGuide.md](docs/UserGuide/UserGuide.md). 
 
 ## Docker Installation
-To build the docker file
-* docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t HAK/clinvarapp:latest .
+To build the docker file, first change directory to the root of the project folder, ClinVar_Search. Then run this command
+<pre>
+docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t HAK/clinvarapp:latest .
+</pre>
 
 To run the docker image
-* docker run --rm -u \$ \(id -u) : \$ \(id -g) -v \$ \(pwd):/app -p 5000:5000 HAK/clinvarapp:latest & python -m webbrowser http://127.0.0.1:5000
+<pre>
+docker run --rm -u $(id -u):$(id -g) -v $(pwd):/app -p 5000:5000 HAK/clinvarapp:latest & python -m webbrowser http://127.0.0.1:5000
+</pre>
+

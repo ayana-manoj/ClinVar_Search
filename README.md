@@ -19,6 +19,10 @@ HGVS genomic identifier for a query variant and then using it to query ClinVar. 
 
 ClinVar Search is accessed by [installing locally](https://github.com/ayana-manoj/ClinVar_Search/tree/develop/docs).
 
+DISCLAIMER - 
+ChatGPT was used as a support tool during the development. All code has been reviewed, adapted and integrated
+by the creators of this project, and they take full responsibility for the final implementation. 
+
 
 ## Features
 Overview of the workflow

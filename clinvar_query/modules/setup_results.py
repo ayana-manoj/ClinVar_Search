@@ -2,6 +2,7 @@ import sqlite3
 import os
 from clinvar_query.utils.paths import database_file
 
+#Developed with the aid of CHATGPT
 
 def create_database(path=None):
     """

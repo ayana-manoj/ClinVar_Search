@@ -1,3 +1,5 @@
+#********* TEST DEVELOPED WITH THE AID OF CHATGPT ***********
+
 import sqlite3
 import pytest
 from clinvar_query.modules.setup_results import create_database

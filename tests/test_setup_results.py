@@ -33,5 +33,3 @@ def test_create_database_tables(test_db):
     }
 
     assert expected_tables.issubset(tables), f"Missing tables: {expected_tables - tables}"
-
-

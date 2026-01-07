@@ -17,12 +17,12 @@ $ git clone https://github.com/ayana-manoj/ClinVar_Search.git
 $ cd ClinVar_Search/
 
 Python environment 
-When installing ClinVar_Search, it is recommended to use a virtual enviroment, as it specific versions of several libraries. 
+When installing ClinVar_Search, it is recommended to use a virtual environment, as it specific versions of several libraries. 
 
 Via conda (Recommended)
 After installing conda you can create a new virtual environment with the correct python and sqlite versions by running:
 
 $ conda env create -f environment.yml
-$ conda activate ClinVar_Search
+$ conda activate clinvar_search
 
 If ClinVar_Search is not found as a module (ModuleNotFoundError), add this project to python path using export PYTHONPATH=/path/to/project/ClinVar_Search:$PYTHONPATH

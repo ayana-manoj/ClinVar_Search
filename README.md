@@ -70,4 +70,5 @@ To build the docker file
 * docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t HAK/clinvarapp:latest .
 
 To run the docker image
+<!-- language: lang-none -->
 * docker run --rm -u $(id -u):$(id -g) -v $(pwd):/app -p 5000:5000 HAK/clinvarapp:latest & python -m webbrowser http://127.0.0.1:5000

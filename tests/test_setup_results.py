@@ -1,4 +1,4 @@
-*********** TEST DEVELOPED WITH THE AID OF CHATGPT ***********
+#********* TEST DEVELOPED WITH THE AID OF CHATGPT ***********
 
 import sqlite3
 import pytest

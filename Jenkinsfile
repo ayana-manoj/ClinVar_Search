@@ -54,8 +54,12 @@ pipeline {
                 // Run the test suite using pytest
                 sh """#!/bin/bash
                 bash -c 'source ${CONDA_PREFIX}/etc/profile.d/conda.sh && \
-                         conda activate ${CONDA_ENV_NAME} && \
-                         pytest --cov-config=.coveragerc --cov=clinvar_query --cov=clinvar_query.ClinVar_Site tests/'
+                        conda activate ${CONDA_ENV_NAME} && \
+                        pytest --cov=clinvar_query/modules \
+                                --cov=clinvar_query/utils \
+                                --cov-branch \
+                                --cov-report=term-missing \
+                                tests/'
                 """
             }
         }

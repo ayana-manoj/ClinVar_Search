@@ -1,0 +1,275 @@
+Started by user Ayana Elan Manoj
+15:39:30 Connecting to https://api.github.com with no credentials, anonymous access
+Obtained Jenkinsfile from 4f00f0d9c32b67e87d2495be2cc3d8a364d83efc
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/ClinVar_Search_Sprint3
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/ClinVar_Search_Sprint3/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/ayana-manoj/ClinVar_Search.git # timeout=10
+Fetching without tags
+Fetching upstream changes from https://github.com/ayana-manoj/ClinVar_Search.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.34.1'
+ > git fetch --no-tags --force --progress -- https://github.com/ayana-manoj/ClinVar_Search.git +refs/heads/Sprint3:refs/remotes/origin/Sprint3 # timeout=10
+Checking out Revision 4f00f0d9c32b67e87d2495be2cc3d8a364d83efc (Sprint3)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 4f00f0d9c32b67e87d2495be2cc3d8a364d83efc # timeout=10
+Commit message: "made numbering changes in user manual (Documentation Sprint #28)"
+ > git rev-list --no-walk 7a47811b4cfeec5242272636b415955c9e92aaa1 # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/ClinVar_Search_Sprint3/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/ayana-manoj/ClinVar_Search.git # timeout=10
+Fetching without tags
+Fetching upstream changes from https://github.com/ayana-manoj/ClinVar_Search.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.34.1'
+ > git fetch --no-tags --force --progress -- https://github.com/ayana-manoj/ClinVar_Search.git +refs/heads/Sprint3:refs/remotes/origin/Sprint3 # timeout=10
+Checking out Revision 4f00f0d9c32b67e87d2495be2cc3d8a364d83efc (Sprint3)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 4f00f0d9c32b67e87d2495be2cc3d8a364d83efc # timeout=10
+Commit message: "made numbering changes in user manual (Documentation Sprint #28)"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Setup Conda Environment)
+[Pipeline] sh
+CI detected...
+2 channel Terms of Service accepted
+
+Remove all packages in environment /var/lib/jenkins/.conda/envs/clinvar_search:
+
+
+## Package Plan ##
+
+  environment location: /var/lib/jenkins/.conda/envs/clinvar_search
+
+
+The following packages will be REMOVED:
+
+  _libgcc_mutex-0.1-conda_forge
+  _openmp_mutex-4.5-2_gnu
+  aniso8601-10.0.0-pyhd8ed1ab_0
+  attrs-25.4.0-pyhcf101f3_1
+  backports.zstd-1.3.0-py312h90b7ffd_0
+  blinker-1.9.0-pyhff2d567_0
+  brotli-python-1.2.0-py312hdb49522_1
+  bzip2-1.0.8-hda65f42_8
+  ca-certificates-2026.1.4-hbd8a1cb_0
+  certifi-2026.1.4-pyhd8ed1ab_0
+  charset-normalizer-3.4.4-pyhd8ed1ab_0
+  click-8.3.1-pyh8f84b5b_1
+  colorama-0.4.6-pyhd8ed1ab_1
+  coverage-7.13.1-py312h8a5da7c_0
+  dicttoxml-1.7.16-pyhd8ed1ab_1
+  exceptiongroup-1.3.1-pyhd8ed1ab_0
+  flask-3.1.2-pyhd8ed1ab_0
+  flask-restx-1.3.0-pyhd8ed1ab_1
+  h2-4.3.0-pyhcf101f3_0
+  hpack-4.1.0-pyhd8ed1ab_0
+  hyperframe-6.1.0-pyhd8ed1ab_0
+  icu-78.1-h33c6efd_0
+  idna-3.11-pyhd8ed1ab_0
+  importlib-metadata-8.7.0-pyhe01879c_1
+  importlib-resources-6.5.2-pyhd8ed1ab_0
+  importlib_resources-6.5.2-pyhd8ed1ab_0
+  iniconfig-2.3.0-pyhd8ed1ab_0
+  itsdangerous-2.2.0-pyhd8ed1ab_1
+  jinja2-3.1.6-pyhcf101f3_1
+  jsonschema-4.25.1-pyhe01879c_0
+  jsonschema-specifications-2025.9.1-pyhcf101f3_0
+  ld_impl_linux-64-2.45-default_hbd61a6d_105
+  libexpat-2.7.3-hecca717_0
+  libffi-3.5.2-h9ec8514_0
+  libgcc-15.2.0-he0feb66_16
+  libgcc-ng-15.2.0-h69a702a_16
+  libgomp-15.2.0-he0feb66_16
+  liblzma-5.8.1-hb9d3cd8_2
+  libnsl-2.0.1-hb9d3cd8_1
+  libsqlite-3.51.1-hf4e2dac_1
+  libstdcxx-15.2.0-h934c35e_16
+  libuuid-2.41.3-h5347b49_0
+  libxcrypt-4.4.36-hd590300_1
+  libzlib-1.3.1-hb9d3cd8_2
+  markupsafe-3.0.3-py312h8a5da7c_0
+  ncurses-6.5-h2d0b736_3
+  openssl-3.6.0-h26f9b46_0
+  packaging-25.0-pyh29332c3_1
+  pip-25.3-pyh8b19718_0
+  pluggy-1.6.0-pyhf9edf01_1
+  pygments-2.19.2-pyhd8ed1ab_0
+  pysocks-1.7.1-pyha55dd90_7
+  pytest-9.0.2-pyhcf101f3_0
+  pytest-cov-7.0.0-pyhcf101f3_1
+  python-3.12.8-h9e4cc4f_1_cpython
+  python-dateutil-2.9.0.post0-pyhe01879c_2
+  python_abi-3.12-8_cp312
+  pytz-2025.2-pyhd8ed1ab_0
+  readline-8.3-h853b02a_0
+  referencing-0.37.0-pyhcf101f3_0
+  requests-2.32.5-pyhcf101f3_1
+  rpds-py-0.30.0-py312h868fb18_0
+  setuptools-80.9.0-pyhff2d567_0
+  six-1.17.0-pyhe01879c_1
+  tk-8.6.13-noxft_ha0e22de_103
+  tomli-2.3.0-pyhcf101f3_0
+  typing_extensions-4.15.0-pyhcf101f3_0
+  tzdata-2025c-hc9c84f9_1
+  urllib3-2.6.2-pyhd8ed1ab_0
+  werkzeug-3.1.4-pyhcf101f3_0
+  wheel-0.45.1-pyhd8ed1ab_1
+  zipp-3.23.0-pyhcf101f3_1
+  zstd-1.5.7-hb78ec9c_6
+
+
+
+Downloading and Extracting Packages: ...working... done
+Preparing transaction: - done
+Verifying transaction: | done
+Executing transaction: - \ | / - \ | / - \ | done
+CI detected...
+2 channel Terms of Service accepted
+Channels:
+ - conda-forge
+ - bioconda
+ - defaults
+Platform: linux-64
+Collecting package metadata (repodata.json): - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | done
+Solving environment: - \ done
+
+
+==> WARNING: A newer version of conda exists. <==
+    current version: 25.7.0
+    latest version: 25.11.1
+
+Please update conda by running
+
+    $ conda update -n base -c defaults conda
+
+
+
+Downloading and Extracting Packages: ...working... done
+Preparing transaction: / - \ | done
+Verifying transaction: - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / done
+Executing transaction: \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / done
+#
+# To activate this environment, use
+#
+#     $ conda activate clinvar_search
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Install Package)
+[Pipeline] sh
+Processing /var/lib/jenkins/workspace/ClinVar_Search_Sprint3
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Requirement already satisfied: setuptools==80.9.0 in /var/lib/jenkins/.conda/envs/clinvar_search/lib/python3.12/site-packages (from clinvar_query==0.0.1) (80.9.0)
+Requirement already satisfied: wheel==0.45.1 in /var/lib/jenkins/.conda/envs/clinvar_search/lib/python3.12/site-packages (from clinvar_query==0.0.1) (0.45.1)
+Building wheels for collected packages: clinvar_query
+  Building wheel for clinvar_query (pyproject.toml): started
+  Building wheel for clinvar_query (pyproject.toml): finished with status 'done'
+  Created wheel for clinvar_query: filename=clinvar_query-0.0.1-py3-none-any.whl size=3399317 sha256=cc8e8a24384ac99abe557ed66e1531b29276d47484ffe6724e08d7f826fc5803
+  Stored in directory: /tmp/pip-ephem-wheel-cache-o_tb8zvb/wheels/be/e0/65/035b0c6fc04f12282f54fccd4499bd7529285e4b46dece380d
+Successfully built clinvar_query
+Installing collected packages: clinvar_query
+Successfully installed clinvar_query-0.0.1
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Run Tests)
+[Pipeline] sh
+============================= test session starts ==============================
+platform linux -- Python 3.12.8, pytest-9.0.2, pluggy-1.6.0
+rootdir: /var/lib/jenkins/workspace/ClinVar_Search_Sprint3
+configfile: pyproject.toml
+plugins: cov-7.0.0
+collected 74 items
+
+tests/test_clinvar_api_query.py ............                             [ 16%]
+tests/test_database_init.py ...                                          [ 20%]
+tests/test_file_check.py ....                                            [ 25%]
+tests/test_insert_annotated_results.py ...                               [ 29%]
+tests/test_json_to_db.py .........                                       [ 41%]
+tests/test_parser.py ............                                        [ 58%]
+tests/test_patient_lookup.py ......                                      [ 66%]
+tests/test_process_upload.py .......                                     [ 75%]
+tests/test_read_upload.py .....                                          [ 82%]
+tests/test_save_function.py ....                                         [ 87%]
+tests/test_search_results.py ..                                          [ 90%]
+tests/test_setup_results.py .                                            [ 91%]
+tests/test_vv_variant_query.py ....../var/lib/jenkins/.conda/envs/clinvar_search/lib/python3.12/site-packages/coverage/control.py:958: CoverageWarning: No data was collected. (no-data-collected); see https://coverage.readthedocs.io/en/7.13.1/messages.html#warning-no-data-collected
+  self._warn("No data was collected.", slug="no-data-collected")
+                                    [100%]
+
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.8-final-0 ________________
+
+Name                                                Stmts   Miss  Cover   Missing
+---------------------------------------------------------------------------------
+clinvar_query/modules/check_file_status.py             19     19     0%   1-40
+clinvar_query/modules/clinvar_api_query.py             84     84     0%   20-216
+clinvar_query/modules/insert_annotated_results.py      47     47     0%   17-220
+clinvar_query/modules/json_to_db.py                    97     97     0%   19-275
+clinvar_query/modules/parser.py                        40     40     0%   2-61
+clinvar_query/modules/patient_lookup.py                29     29     0%   1-80
+clinvar_query/modules/process_uploads.py               30     30     0%   1-73
+clinvar_query/modules/read_uploads.py                  17     17     0%   1-33
+clinvar_query/modules/save_function.py                 22     22     0%   1-47
+clinvar_query/modules/search_results.py                26     26     0%   1-55
+clinvar_query/modules/setup_results.py                 18     18     0%   1-56
+clinvar_query/modules/vv_variant_query.py              64     64     0%   30-186
+clinvar_query/utils/database_initialisation.py         13     13     0%   1-22
+clinvar_query/utils/logger.py                          23     23     0%   1-42
+clinvar_query/utils/messages.py                         3      3     0%   5-18
+clinvar_query/utils/paths.py                           16     16     0%   1-35
+---------------------------------------------------------------------------------
+TOTAL                                                 548    548     0%
+
+2 empty files skipped.
+============================== 74 passed in 2.78s ==============================
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] echo
+CI pipeline finished.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
+

@@ -13,16 +13,28 @@ Before installation, make sure you have:
 Download the source code
 To download the ClinVar_Search source code simply clone the master branch.
 
-$ git clone https://github.com/ayana-manoj/ClinVar_Search.git
-$ cd ClinVar_Search/
+```bash
+git clone https://github.com/ayana-manoj/ClinVar_Search.git
+cd ClinVar_Search/
+```
 
-Python environment 
+# Python environment:
 When installing ClinVar_Search, it is recommended to use a virtual environment, as it specific versions of several libraries. 
 
 Via conda (Recommended)
 After installing conda you can create a new virtual environment with the correct python and sqlite versions by running:
 
-$ conda env create -f environment.yml
-$ conda activate clinvar_search
 
-If ClinVar_Search is not found as a module (ModuleNotFoundError), add this project to python path using export PYTHONPATH=/path/to/project/ClinVar_Search:$PYTHONPATH
+```bash
+conda env create -f environment.yml
+conda activate ClinVar_Search
+```
+
+If ClinVar_Search is not found as a module (ModuleNotFoundError), add this project to python path using `export PYTHONPATH=/path/to/project/ClinVar_Search:$PYTHONPATH`
+
+# Running ClinVar_Search
+
+After installing and activating your environment, run the application with:
+
+```bash
+python clinvar_query/ClinVar_Site/app.py 

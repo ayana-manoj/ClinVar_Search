@@ -143,3 +143,5 @@ def test_insert_clinvar(temp_db):
 
     logger.info(f"testing insert_clinvar: {result}")
     assert expected == result
+
+#Made with CHATGPT

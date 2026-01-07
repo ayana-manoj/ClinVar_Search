@@ -1,3 +1,5 @@
+*********** TEST DEVELOPED WITH THE AID OF CHATGPT ***********
+
 import sqlite3
 import pytest
 from clinvar_query.modules.setup_results import create_database
@@ -31,3 +33,5 @@ def test_create_database_tables(test_db):
     }
 
     assert expected_tables.issubset(tables), f"Missing tables: {expected_tables - tables}"
+
+

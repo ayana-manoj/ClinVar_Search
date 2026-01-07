@@ -10,6 +10,8 @@ Logging is handled by the shared ClinVar_Search_logger, which must be
 configured elsewhere in the application.
 """
 
+#Developed with the aid of CHATGPT
+
 import sqlite3
 
 from clinvar_query.utils.paths import database_file

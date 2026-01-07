@@ -23,7 +23,11 @@ Via conda (Recommended)
 After installing conda you can create a new virtual environment with the correct python and sqlite versions by running:
 
 `$ conda env create -f environment.yml`
+
 `$ conda activate clinvar_search`
+
+`$ pip install .`
+
 
 To run the web application, first ensure you are in the ClinVar_Search directory, then run this command.
 

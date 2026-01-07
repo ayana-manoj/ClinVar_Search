@@ -2,6 +2,20 @@ import os
 from flask import request
 from clinvar_query.utils.logger import logger
 
+"""This is used to read uploads
+This looks for files and reads the file
+There is error handling involved
+
+If there is a done file:
+File is read
+
+If there is no file:
+No file selected will pop up
+
+If there is a file but no file path:
+Please refresh and try again message pops up
+
+"""
 
 def read_file(folder, filetype):
     try:

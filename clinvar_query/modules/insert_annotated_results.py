@@ -1,12 +1,16 @@
 """
+
+*********** DEVELOPED WITH CHATGPT ASSISTANCE ***********
+
 Database insertion utilities for ClinVar query results.
 
-This module provides helper functions to insert or update:
-- Patient information
-- Variant associations
+This module provides helper functions to insert or update records
+related to:
+- Patient metadata
+- Patient–variant associations
 - ClinVar annotations
 
-Logging is handled by the shared ClinVar_Search_logger, which must be
+Logging is handled by the shared ClinVar logger, which must be
 configured elsewhere in the application.
 """
 
@@ -23,20 +27,22 @@ from clinvar_query.utils.logger import logger
 
 def insert_patient_information(data):
     """
-    Insert or update a patient's information into the database.
+        Insert or update patient information in the database.
 
-    Parameters
-    ----------
-    data : dict
-        Dictionary containing:
-        - patient_id (str): Unique patient identifier
-        - patient_id (str): Identifier for the test or assay
+        Parameters
+        ----------
+        data : dict
+            Dictionary containing patient metadata with the following keys:
 
-    Notes
-    -----
-    Uses INSERT OR REPLACE to ensure idempotent behaviour and allow
-    re-processing of the same patient data.
-    """
+            patient_id : str
+                Unique identifier for the patient.
+
+        Notes
+        -----
+        - Uses ``INSERT OR IGNORE`` to ensure idempotent behavior.
+        - Allows safe re-processing of identical patient records without
+          raising integrity errors.
+        """
     logger.debug("Preparing to insert patient information: %s", data)
 
     try:
@@ -44,7 +50,7 @@ def insert_patient_information(data):
         con = sqlite3.connect(database_file)
         cursor = con.cursor()
 
-        # Insert or replace patient information
+        # Insert patient information if it does not already exist
         cursor.execute(
             """
             INSERT OR IGNORE INTO patient_information
@@ -78,22 +84,30 @@ def insert_patient_information(data):
 
 def insert_variants(data):
     """
-    Insert or update variant information in the database.
+       Insert or update patient–variant association records.
 
-    Parameters
-    ----------
-    data : dict
-        Dictionary containing:
-        - variant_id (str): Variant identifier
-        - patient_id (str): patient identifier
-        - patient_variant (str): Composite patient-variant key
-    """
+       Parameters
+       ----------
+       data : dict
+           Dictionary containing variant association data with the
+           following keys:
+
+           variant_id : str
+               Unique identifier for the variant.
+
+           patient_id : str
+               Identifier for the associated patient.
+
+           patient_variant : str
+               Composite identifier linking patient and variant.
+       """
     logger.debug("Preparing to insert variant record: %s", data)
 
     try:
+        # Open a database connection
         con = sqlite3.connect(database_file)
         cursor = con.cursor()
-
+        # Insert the patient–variant association if absent
         cursor.execute(
             """
             INSERT OR IGNORE INTO variants

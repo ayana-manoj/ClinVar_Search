@@ -44,7 +44,7 @@ pipeline {
                 sh """#!/bin/bash
                 bash -c 'source ${CONDA_PREFIX}/etc/profile.d/conda.sh && \
                          conda activate ${CONDA_ENV_NAME} && \
-                         pip install .'
+                         pip install -e .'
                 """
             }
         }
@@ -54,8 +54,12 @@ pipeline {
                 // Run the test suite using pytest
                 sh """#!/bin/bash
                 bash -c 'source ${CONDA_PREFIX}/etc/profile.d/conda.sh && \
-                         conda activate ${CONDA_ENV_NAME} && \
-                         pytest --cov=clinvar_query tests/'
+                        conda activate ${CONDA_ENV_NAME} && \
+                        pytest --cov=clinvar_query/modules \
+                                --cov=clinvar_query/utils \
+                                --cov-branch \
+                                --cov-report=term-missing \
+                                tests/'
                 """
             }
         }

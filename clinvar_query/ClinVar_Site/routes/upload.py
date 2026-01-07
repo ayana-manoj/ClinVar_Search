@@ -7,6 +7,22 @@ from clinvar_query.modules.clinvar_api_query import process_clinvar
 from clinvar_query.modules.json_to_db import json_to_dir
 import threading
 
+"""
+This evalutes the file that has been uploaded to the site
+It checks to see if there is an allowed extension, if not it redirects to an error site
+If it is allowed, then the process_upload_file module is called
+Depending on the results of the processing, several different outcomes can occur
+This is dependent on:
+Whether the file is processed properly or misaligned
+Whether the filename exists already and the status of the overwrite flag
+
+If the site redirects to the upload success page
+a pipeline is run, which runs all the api queries along with writing data to database
+
+The outcomes:
+Error site, this can have informative messages
+Upload success, this runs the pipeline and has informative messages depending on how the file was processed
+"""
 
 process_bp = Blueprint("process", __name__)
 
@@ -60,6 +76,7 @@ def upload_file():
 
     # GET request → render upload page
     return render_template("upload_site.html")
+
 
 
 @process_bp.route("/upload_success")

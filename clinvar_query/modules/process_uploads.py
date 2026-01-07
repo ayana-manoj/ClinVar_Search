@@ -3,12 +3,22 @@ from clinvar_query.modules.check_file_status import app_file_check
 from clinvar_query.utils.logger import logger
 import os
 
+"""This module evaluates the state of
+processed file
+status
+to return a dictionary of values, this dictionary contains
+the redirect endpoint, the message parameters
+This will then take inputs from messages.py to output informative data
+This is fed into upload.py
+
+"""
 
 
 def process_upload_file(file, folder, processed_folder, error_folder,  overwrite=False):
     # This does not have try except blocks as the logic here
     # involves redirecting to an error site.
     # However, there are  still loggers with levels to ensure it is informative
+    #parts of this function were made with chatGPT
     if not file:
         return {"redirect_endpoint": "error_site", "messages": {"message":
                                                                 "no_file"}}

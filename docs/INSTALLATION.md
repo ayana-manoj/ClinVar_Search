@@ -23,5 +23,8 @@ Via conda (Recommended)
 After installing conda you can create a new virtual environment with the correct python and sqlite versions by running:
 
 `$ conda env create -f environment.yml`
-`$ conda activate ClinVar_Search`
-If ClinVar_Search is not found as a module (ModuleNotFoundError), add this project to python path using export PYTHONPATH=/path/to/project/ClinVar_Search:$PYTHONPATH
+`$ conda activate clinvar_search`
+
+To run the web application, first ensure you are in the ClinVar_Search directory, then run this command.
+
+`$ python clinvar_query/ClinVar_Site/app.py & python -m webbrowser http://127.0.0.1:5000`

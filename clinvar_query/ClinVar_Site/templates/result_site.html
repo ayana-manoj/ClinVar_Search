@@ -47,7 +47,8 @@
       <h1 class="card-title mb-4 text-center text-primary">View Results here</h1>
       <p class="text-secondary mb-4">
         Here is where you can see your latest results.
-        Click on either list to get insights into your data.
+        The table below shows all the patient variants
+        Scroll down to see your processed files
       </p>
 
       <!-- Database List -->
@@ -101,7 +102,7 @@
         {% endif %}
       </ul>
 
-      <!-- Error List -->
+      <!-- Error File List -->
       <h3 class="mt-4 text-primary">Misaligned files</h3>
       <ul class="list-group">
         {% if misaligned %}
@@ -151,6 +152,7 @@
 
 
 <script>
+<!--made with chatGPT -->
 document.addEventListener("DOMContentLoaded", function() {
   //elements for the processed data modal
   const modal1 = new bootstrap.Modal(document.getElementById('fileModal1'));
@@ -167,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function() {
   document.querySelectorAll('.file-link-1').forEach(link => {
     link.addEventListener('click', function(e) {
       e.preventDefault();
-      const fileprocess = this.dataset.fileprocess  // <- this must match your folder
+      const fileprocess = this.dataset.fileprocess 
 
       fetch(`/result_site/view_file?fileprocess=${encodeURIComponent(fileprocess)}`)
         .then(response => {
@@ -194,7 +196,7 @@ document.addEventListener("DOMContentLoaded", function() {
   document.querySelectorAll('.file-link-2').forEach(link => {
     link.addEventListener('click', function(e) {
       e.preventDefault();
-      const filemisalign = this.dataset.filemisalign// <- this must match your folder
+      const filemisalign = this.dataset.filemisalign
 
 fetch(`/result_site/view_misalign?filemisalign=${encodeURIComponent(filemisalign)}`)
         .then(response => {

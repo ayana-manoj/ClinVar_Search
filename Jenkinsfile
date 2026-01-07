@@ -44,7 +44,7 @@ pipeline {
                 sh """#!/bin/bash
                 bash -c 'source ${CONDA_PREFIX}/etc/profile.d/conda.sh && \
                          conda activate ${CONDA_ENV_NAME} && \
-                         pip install .'
+                         pip install -e .'
                 """
             }
         }

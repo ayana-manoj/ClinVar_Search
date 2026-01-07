@@ -59,7 +59,7 @@ Please see [LICENSE.txt](LICENSE.txt)
 
 
 ## Pre-requisites for local installation
-ClinVar Search will work locally on Mac OS X or Linux-compatible computers. It can also work within a [docker container](docs/DOCKER.md). For installation guidance, see Installation Manuals below.
+ClinVar Search will work locally on Mac OS X or Linux-compatible computers. It can also work within a [docker container](Dockerfile) For installation guidance, see Installation Manuals below.
 
 **Required software:**
 * Python 3.12.8

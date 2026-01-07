@@ -14,6 +14,7 @@ Download the source code
 To download the ClinVar_Search source code simply clone the master branch.
 
 `$ git clone https://github.com/ayana-manoj/ClinVar_Search.git`
+
 `$ cd ClinVar_Search/`
 
 Python environment 
